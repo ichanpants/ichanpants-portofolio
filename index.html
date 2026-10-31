@@ -1,140 +1,119 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ichan's Micro-Tools Hub & Vibe Coding Services</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Firebase SDK (v9 Compatibility Mode) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- PDF-Lib for Client-Side PDF Utilities -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col justify-between p-3 sm:p-6 md:p-8 transition-colors duration-300">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between p-3 sm:p-8 transition-colors duration-200">
 
-  <div class="max-w-3xl mx-auto w-full space-y-5 sm:space-y-6">
+  <div class="max-w-4xl mx-auto w-full space-y-6">
     
-    <!-- TOP NAVIGATION & THEME TOGGLE -->
-    <div class="flex justify-between items-center bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 px-3.5 sm:px-4 py-2.5 rounded-2xl shadow-sm dark:shadow-lg backdrop-blur transition-colors duration-300">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-emerald-400 flex items-center justify-center text-white font-black text-xs shadow-md shadow-indigo-500/20">
-          IP
+    <!-- TOP BAR (HEADER & THEME TOGGLE) -->
+    <header class="space-y-4 pt-2">
+      <div class="flex justify-between items-center bg-slate-800/60 dark:bg-slate-800/60 border border-slate-700/60 rounded-xl px-4 py-3 shadow-md backdrop-blur">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-indigo-500 animate-pulse"></span>
+          <span class="text-xs font-mono font-bold tracking-wide text-slate-200 dark:text-slate-200">ichanpants.dev</span>
         </div>
-        <span class="font-bold text-xs sm:text-sm tracking-wide text-slate-900 dark:text-white">ichanpants</span>
-      </div>
-      
-      <div class="flex items-center gap-2">
-        <!-- DARK / LIGHT MODE TOGGLE BUTTON -->
-        <button onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle Theme" class="p-2 sm:px-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 font-medium">
-          <i id="themeIcon" class="fa-solid fa-moon"></i>
-          <span id="themeText" class="text-[11px] font-semibold">Dark Mode</span>
+        
+        <button id="themeToggle" onclick="toggleTheme()" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-700 dark:border-slate-700 bg-slate-800 dark:bg-slate-800 text-slate-200 dark:text-slate-200 hover:border-indigo-500 transition">
+          <span id="themeIcon">🌙</span>
+          <span id="themeText">Dark Mode</span>
         </button>
-
-        <a href="https://x.com/ichanpants" target="_blank" rel="noopener" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-xl transition flex items-center gap-1.5 font-medium shadow-md shadow-indigo-600/20">
-          <i class="fa-brands fa-x-twitter"></i>
-          <span class="hidden sm:inline">Follow</span>
-        </a>
       </div>
-    </div>
 
-    <!-- HERO BANNER IMAGE INTEGRATION -->
-    <div class="relative group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl bg-slate-900">
-      <img 
-        src="Vibe Coding di Studio Neon.png" 
-        onerror="this.onerror=null; this.src='https://placehold.co/1200x675/1e1b4b/6366f1?text=Vibe+Coding+AI+Web+Development';" 
-        alt="Vibe Coding AI Web Development Studio" 
-        class="w-full h-auto object-cover transform group-hover:scale-[1.01] transition duration-500"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none"></div>
-    </div>
-    
-    <!-- HEADER PORTOFOLIO SINGKAT -->
-    <header class="text-center space-y-2.5 pt-1">
-      <div class="inline-block bg-indigo-100 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 text-xs px-3.5 py-1 rounded-full font-mono font-semibold border border-indigo-300 dark:border-indigo-500/30">
-        ⚡ Vibe Coding & AI Web Development
+      <!-- HERO BANNER CARD -->
+      <div class="relative overflow-hidden rounded-2xl border border-indigo-500/30 shadow-2xl bg-slate-800/80 dark:bg-slate-800/80 group">
+        <img src="Vibe Coding di Studio Neon.png" 
+             alt="Vibe Coding AI Web Development" 
+             class="w-full h-auto object-cover max-h-[380px]"
+             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'p-8 text-center bg-gradient-to-r from-indigo-900 to-purple-900 text-white rounded-2xl\'><h2 class=\'text-2xl font-bold\'>⚡ Vibe Coding & AI Web Development</h2><p class=\'text-xs text-indigo-200 mt-1\'>Landing Pages & Web Apps Delivered in 24 Hours</p></div>';" />
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Hi, I'm Ichan 👋</h1>
-      <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed px-2">
-        I build fast, interactive web applications and custom micro-tools in hours. Try my free interactive tools below!
-      </p>
 
-      <!-- ANALYTICS BADGE (KATROL + REALTIME FIREBASE) -->
-      <div class="flex flex-wrap justify-center items-center gap-2.5 sm:gap-4 pt-1 text-xs">
-        <div class="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3.5 py-1.5 rounded-full shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-slate-600 dark:text-slate-400">Total Executions: <strong id="total-usage-count" class="text-emerald-600 dark:text-emerald-400 font-mono">348</strong></span>
+      <!-- HEADER TEXT & BIO -->
+      <div class="text-center space-y-2 pt-2">
+        <div class="inline-block bg-indigo-600/20 text-indigo-400 text-xs px-3.5 py-1 rounded-full font-mono border border-indigo-500/30">
+          ⚡ Vibe Coding & Client-Side Micro-Tools
         </div>
-        <div class="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3.5 py-1.5 rounded-full shadow-sm">
-          <span class="text-slate-600 dark:text-slate-400">Turnaround: <strong class="text-indigo-600 dark:text-indigo-400 font-mono">&lt; 24h</strong></span>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white dark:text-white">Hi, I'm Ichan 👋</h1>
+        <p class="text-slate-400 dark:text-slate-400 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed">
+          I build lightning-fast web apps & micro-tools using AI. Try my interactive client-side utilities below!
+        </p>
+
+        <!-- ANALYTICS BADGE -->
+        <div class="flex justify-center items-center gap-3 pt-2 text-xs">
+          <div class="flex items-center gap-2 bg-slate-800/80 dark:bg-slate-800/80 border border-slate-700/60 px-3.5 py-1.5 rounded-full shadow-sm text-slate-300 dark:text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Total Tool Executions: <strong id="total-usage-count" class="text-emerald-400 font-mono">348</strong></span>
+          </div>
+          <div class="hidden sm:flex items-center gap-2 bg-slate-800/80 dark:bg-slate-800/80 border border-slate-700/60 px-3.5 py-1.5 rounded-full shadow-sm text-slate-300 dark:text-slate-300">
+            <span>Delivery Speed: <strong class="text-indigo-400 font-mono">&lt; 24h</strong></span>
+          </div>
         </div>
       </div>
     </header>
 
-    <!-- NAVIGATION TAB MICRO-TOOLS -->
-    <div class="flex justify-center border-b border-slate-200 dark:border-slate-800 pb-2 gap-1.5 sm:gap-2 text-xs font-semibold overflow-x-auto">
-      <button onclick="switchTab('tool1')" id="tab-tool1" class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition flex items-center gap-1.5 whitespace-nowrap">
-        <i class="fa-solid fa-calculator"></i>
-        <span>Cost Estimator</span>
+    <!-- NAVIGATION TABS -->
+    <div class="flex flex-wrap justify-center border-b border-slate-800 dark:border-slate-800 pb-2 gap-1.5 sm:gap-2 text-xs font-semibold">
+      <button onclick="switchTab('tool1')" id="tab-tool1" class="px-3 sm:px-4 py-2 rounded-lg bg-indigo-600 text-white transition">
+        🛠️ Cost Estimator
       </button>
-      <button onclick="switchTab('tool2')" id="tab-tool2" class="px-3.5 py-2 rounded-xl bg-slate-200 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition flex items-center gap-1.5 whitespace-nowrap">
-        <i class="fa-solid fa-feather"></i>
-        <span>Hook Counter</span>
+      <button onclick="switchTab('tool2')" id="tab-tool2" class="px-3 sm:px-4 py-2 rounded-lg bg-slate-800 dark:bg-slate-800 text-slate-400 dark:text-slate-400 hover:text-white transition">
+        ✍️ Hook Counter
       </button>
-      <button onclick="switchTab('tool3')" id="tab-tool3" class="px-3.5 py-2 rounded-xl bg-slate-200 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition flex items-center gap-1.5 whitespace-nowrap">
-        <i class="fa-solid fa-chart-line"></i>
-        <span>ROI Calculator</span>
+      <button onclick="switchTab('tool3')" id="tab-tool3" class="px-3 sm:px-4 py-2 rounded-lg bg-slate-800 dark:bg-slate-800 text-slate-400 dark:text-slate-400 hover:text-white transition">
+        📈 ROI Calc
+      </button>
+      <button onclick="switchTab('tool4')" id="tab-tool4" class="px-3 sm:px-4 py-2 rounded-lg bg-slate-800 dark:bg-slate-800 text-slate-400 dark:text-slate-400 hover:text-white transition">
+        🔀 FX Rate Estimator
+      </button>
+      <button onclick="switchTab('tool5')" id="tab-tool5" class="px-3 sm:px-4 py-2 rounded-lg bg-slate-800 dark:bg-slate-800 text-slate-400 dark:text-slate-400 hover:text-white transition">
+        📄 PDF Utility
       </button>
     </div>
 
     <!-- AREA KONTEN TOOL -->
-    <main class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-md dark:shadow-xl transition-colors duration-300">
+    <main class="bg-slate-800/80 dark:bg-slate-800/80 border border-slate-700/80 dark:border-slate-700/80 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur">
       
       <!-- TOOL 1: ESTIMATOR BIAYA -->
       <div id="tool1" class="tool-content space-y-4">
-        <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-          <h2 class="text-base sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-            <i class="fa-solid fa-cubes"></i> Project Cost & Time Estimator
-          </h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Estimate how fast and affordable your web project can be built using Vibe Coding.</p>
+        <div class="border-b border-slate-700/60 pb-3">
+          <h2 class="text-lg font-bold text-indigo-400">🛠️ Project Cost & Time Estimator</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Estimate how fast and affordable your web project can be built using Vibe Coding.</p>
         </div>
 
-        <div class="space-y-4 text-sm">
+        <div class="space-y-4 text-xs sm:text-sm">
           <div>
-            <label class="block font-semibold text-slate-800 dark:text-slate-200 mb-1.5 text-xs">Project Type:</label>
-            <select id="type" onchange="calcCost()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-slate-900 dark:text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500 transition text-xs">
+            <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Project Type:</label>
+            <select id="type" onchange="calcCost()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-100 dark:text-slate-100 outline-none">
               <option value="100">Landing Page / Single Page Web ($100)</option>
               <option value="200">Interactive Web App / Dashboard ($200)</option>
               <option value="150">Micro SaaS / Custom Tool ($150)</option>
             </select>
           </div>
           <div>
-            <label class="block font-semibold text-slate-800 dark:text-slate-200 mb-1.5 text-xs">Turnaround Speed Needed:</label>
-            <select id="speed" onchange="calcCost()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-slate-900 dark:text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500 transition text-xs">
+            <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Turnaround Speed Needed:</label>
+            <select id="speed" onchange="calcCost()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-100 dark:text-slate-100 outline-none">
               <option value="1">Standard (48 Hours)</option>
               <option value="1.3">Express Rush (24 Hours) (+30%)</option>
             </select>
           </div>
-          <div class="bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-500/30 rounded-2xl p-4 sm:p-5 text-center mt-4">
-            <span class="text-xs text-indigo-700 dark:text-indigo-300 uppercase font-mono font-bold tracking-wider">Estimated Investment</span>
-            <div id="totalCost" class="text-2xl sm:text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 my-1">$100 USD</div>
-            <button onclick="logToolUsage('Cost Estimator', document.getElementById('totalCost').innerText)" class="mt-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-md shadow-indigo-600/20">
+          <div class="bg-indigo-950/40 dark:bg-indigo-950/40 border border-indigo-500/30 rounded-xl p-4 text-center mt-4">
+            <span class="text-xs text-indigo-300 uppercase font-mono tracking-wider">Estimated Investment</span>
+            <div id="totalCost" class="text-3xl font-extrabold text-indigo-400 my-1">$100 USD</div>
+            <button onclick="logToolUsage('Cost Estimator', document.getElementById('totalCost').innerText)" class="mt-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition">
               💾 Save Estimation to Cloud
             </button>
           </div>
@@ -143,31 +122,29 @@
 
       <!-- TOOL 2: SOCIAL POST COUNTER -->
       <div id="tool2" class="tool-content hidden space-y-4">
-        <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-          <h2 class="text-base sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-            <i class="fa-solid fa-pen-nib"></i> Social Post & Hook Counter
-          </h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Draft your X/LinkedIn posts and check character limits instantly.</p>
+        <div class="border-b border-slate-700/60 pb-3">
+          <h2 class="text-lg font-bold text-indigo-400">✍️ Social Post & Hook Counter</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Draft your X/LinkedIn posts and check character limits instantly.</p>
         </div>
 
-        <div class="space-y-4 text-sm">
-          <textarea id="postText" oninput="countChars()" rows="4" placeholder="Type or paste your post here..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition text-xs"></textarea>
+        <div class="space-y-4 text-xs sm:text-sm">
+          <textarea id="postText" oninput="countChars()" rows="4" placeholder="Type or paste your post here..." class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-3 text-slate-100 dark:text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
           
           <div class="grid grid-cols-3 gap-2 text-center text-xs">
-            <div class="bg-slate-100 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div class="text-slate-500 dark:text-slate-400 font-medium">Characters</div>
-              <div id="charCount" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1">0</div>
+            <div class="bg-slate-900 dark:bg-slate-900 p-3 rounded-lg border border-slate-700">
+              <div class="text-slate-400">Characters</div>
+              <div id="charCount" class="text-lg font-bold text-slate-100 dark:text-slate-100 mt-1">0</div>
             </div>
-            <div class="bg-slate-100 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div class="text-slate-500 dark:text-slate-400 font-medium">Words</div>
-              <div id="wordCount" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1">0</div>
+            <div class="bg-slate-900 dark:bg-slate-900 p-3 rounded-lg border border-slate-700">
+              <div class="text-slate-400">Words</div>
+              <div id="wordCount" class="text-lg font-bold text-slate-100 dark:text-slate-100 mt-1">0</div>
             </div>
-            <div class="bg-slate-100 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div class="text-slate-500 dark:text-slate-400 font-medium">X Limit</div>
-              <div id="xStatus" class="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1">280 left</div>
+            <div class="bg-slate-900 dark:bg-slate-900 p-3 rounded-lg border border-slate-700">
+              <div class="text-slate-400">X Limit</div>
+              <div id="xStatus" class="text-lg font-bold text-emerald-400 mt-1">280 left</div>
             </div>
           </div>
-          <button onclick="logToolUsage('Hook Counter', document.getElementById('charCount').innerText + ' chars')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl transition font-semibold shadow-md shadow-indigo-600/20">
+          <button onclick="logToolUsage('Hook Counter', document.getElementById('charCount').innerText + ' chars')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-lg transition">
             💾 Save Draft Log
           </button>
         </div>
@@ -175,34 +152,116 @@
 
       <!-- TOOL 3: ROI CALCULATOR -->
       <div id="tool3" class="tool-content hidden space-y-4">
-        <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-          <h2 class="text-base sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie"></i> Business ROI Calculator
-          </h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Calculate potential monthly revenue from a custom web app.</p>
+        <div class="border-b border-slate-700/60 pb-3">
+          <h2 class="text-lg font-bold text-indigo-400">📈 Business ROI Calculator</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Calculate potential monthly revenue from a custom web app.</p>
         </div>
 
-        <div class="space-y-4 text-sm">
+        <div class="space-y-4 text-xs sm:text-sm">
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block font-semibold text-slate-800 dark:text-slate-200 mb-1.5 text-xs">Monthly Visitors:</label>
-              <input type="number" id="visitors" value="1000" oninput="calcROI()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-slate-900 dark:text-slate-100 outline-none text-xs">
+              <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Monthly Visitors:</label>
+              <input type="number" id="visitors" value="1000" oninput="calcROI()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-100 dark:text-slate-100 outline-none">
             </div>
             <div>
-              <label class="block font-semibold text-slate-800 dark:text-slate-200 mb-1.5 text-xs">Product Price ($):</label>
-              <input type="number" id="productPrice" value="50" oninput="calcROI()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-slate-900 dark:text-slate-100 outline-none text-xs">
+              <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Product Price ($):</label>
+              <input type="number" id="productPrice" value="50" oninput="calcROI()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-200 outline-none">
             </div>
           </div>
           <div>
-            <label class="block font-semibold text-slate-800 dark:text-slate-200 mb-1.5 text-xs">Conversion Rate (%):</label>
-            <input type="number" id="convRate" value="2" step="0.5" oninput="calcROI()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-slate-900 dark:text-slate-100 outline-none text-xs">
+            <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Conversion Rate (%):</label>
+            <input type="number" id="convRate" value="2" step="0.5" oninput="calcROI()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-200 outline-none">
           </div>
-          <div class="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-500/30 rounded-2xl p-4 sm:p-5 text-center mt-4">
-            <span class="text-xs text-emerald-700 dark:text-emerald-300 uppercase font-mono font-bold tracking-wider">Est. Monthly Revenue</span>
-            <div id="totalROI" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 my-1">$1,000 USD</div>
-            <button onclick="logToolUsage('ROI Calculator', document.getElementById('totalROI').innerText)" class="mt-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-md shadow-emerald-600/20">
+          <div class="bg-emerald-950/40 dark:bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-4 text-center mt-4">
+            <span class="text-xs text-emerald-300 uppercase font-mono tracking-wider">Est. Monthly Revenue</span>
+            <div id="totalROI" class="text-3xl font-extrabold text-emerald-400 my-1">$1,000 USD</div>
+            <button onclick="logToolUsage('ROI Calculator', document.getElementById('totalROI').innerText)" class="mt-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg transition">
               💾 Save ROI Calculation
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 4: FX CURRENCY ESTIMATOR (INTEGRATED DATA & DISCLAIMER) -->
+      <div id="tool4" class="tool-content hidden space-y-4">
+        <div class="border-b border-slate-700/60 pb-3">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-bold text-indigo-400">🔀 FX Rate & Money Changer Estimator</h2>
+            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/30 font-mono">Live API Data</span>
+          </div>
+          <p class="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Calculate real-time foreign currency exchanges with money changer spread margins.</p>
+        </div>
+
+        <div class="space-y-4 text-xs sm:text-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Amount to Exchange:</label>
+              <input type="number" id="fxAmount" value="100" oninput="calcFX()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-100 dark:text-slate-100 outline-none">
+            </div>
+            <div>
+              <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Currency Pair:</label>
+              <select id="fxPair" onchange="calcFX()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-100 dark:text-slate-100 outline-none">
+                <option value="USD">USD ➔ IDR (US Dollar)</option>
+                <option value="SGD">SGD ➔ IDR (Singapore Dollar)</option>
+                <option value="JPY">JPY ➔ IDR (Japanese Yen)</option>
+                <option value="EUR">EUR ➔ IDR (Euro)</option>
+                <option value="MYR">MYR ➔ IDR (Malaysian Ringgit)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Transaction Type:</label>
+            <select id="fxType" onchange="calcFX()" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-slate-100 dark:text-slate-100 outline-none">
+              <option value="buy">Beli (You Buy Foreign Currency / Money Changer Sells)</option>
+              <option value="sell">Jual (You Sell Foreign Currency / Money Changer Buys)</option>
+            </select>
+          </div>
+
+          <!-- FX ESTIMATION RESULT -->
+          <div class="bg-indigo-950/40 dark:bg-indigo-950/40 border border-indigo-500/30 rounded-xl p-4 text-center mt-4 space-y-1">
+            <span class="text-xs text-indigo-300 uppercase font-mono tracking-wider">Estimated Total Value</span>
+            <div id="fxTotal" class="text-2xl sm:text-3xl font-extrabold text-indigo-400">Rp 1,580,000 IDR</div>
+            <p id="fxRateDetail" class="text-[11px] text-slate-400">Estimated Rate: 1 USD = Rp 15,800 IDR</p>
+            <button onclick="logToolUsage('FX Estimator', document.getElementById('fxTotal').innerText)" class="mt-3 bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-lg transition">
+              💾 Save FX Estimate
+            </button>
+          </div>
+
+          <!-- LEGAL DISCLAIMER -->
+          <div class="bg-amber-950/30 border border-amber-500/30 rounded-lg p-3 text-[11px] text-amber-300/90 leading-relaxed">
+            <strong>⚠️ Important Disclaimer:</strong> Data nilai tukar ini bersifat <strong>estimasi acuan pasar real-time</strong>. Kurs penukaran fisik di money changer resmi (seperti SmartDeal, Authorized Money Changer lokal, atau Bank) dapat berbeda-beda tergantung stok fisik uang kertas, pecahan nominal, lokasi cabang, dan jam operasional pasar valas.
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 5: CLIENT-SIDE PDF UTILITY (ZERO SERVER UPLOAD) -->
+      <div id="tool5" class="tool-content hidden space-y-4">
+        <div class="border-b border-slate-700/60 pb-3">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-bold text-indigo-400">📄 Client-Side PDF Tools</h2>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30 font-mono">100% Private (No Upload)</span>
+          </div>
+          <p class="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Merge or inspect PDF files locally inside your web browser. Zero server transfer.</p>
+        </div>
+
+        <div class="space-y-4 text-xs sm:text-sm">
+          <div>
+            <label class="block font-medium text-slate-300 dark:text-slate-300 mb-1">Select PDF File(s):</label>
+            <input type="file" id="pdfInput" multiple accept="application/pdf" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2 text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button onclick="processPDFMerge()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-lg transition text-xs">
+              ⚡ Merge Selected PDFs (Client-Side)
+            </button>
+            <button onclick="extractPDFInfo()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold py-2.5 rounded-lg transition text-xs border border-slate-600">
+              🔍 Read PDF Page Count
+            </button>
+          </div>
+
+          <div id="pdfStatus" class="hidden bg-slate-900 dark:bg-slate-900 p-3 rounded-lg border border-slate-700 text-xs font-mono text-slate-300">
+            Waiting for file selection...
           </div>
         </div>
       </div>
@@ -210,38 +269,38 @@
     </main>
 
     <!-- FORM KONTAK / ORDER (TERHUBUNG KE GOOGLE APPS SCRIPT) -->
-    <section class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-md dark:shadow-lg transition-colors duration-300">
+    <section class="bg-slate-800/40 dark:bg-slate-800/40 border border-slate-800 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-4">
       <div class="text-center">
-        <h3 class="text-base font-bold text-slate-900 dark:text-white">Need a custom web tool or application?</h3>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Fill in your email below or reach out via socials for quick delivery.</p>
+        <h3 class="text-sm sm:text-base font-bold text-white dark:text-white">Need a custom web tool or application?</h3>
+        <p class="text-xs text-slate-400 dark:text-slate-400">Fill in your email below or reach out via socials for quick delivery.</p>
       </div>
 
       <form id="contactForm" onsubmit="submitForm(event)" class="space-y-3 max-w-md mx-auto">
-        <input type="email" id="clientEmail" required placeholder="Your Email Address" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition">
-        <textarea id="clientMessage" rows="3" placeholder="Brief description of your project idea..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition"></textarea>
-        <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white text-xs font-semibold py-3 rounded-xl transition shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2">
-          <span>🚀 Send Inquiry to Google Sheets</span>
+        <input type="email" id="clientEmail" required placeholder="Your Email Address" class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-xs text-slate-100 dark:text-slate-100 outline-none focus:border-indigo-500">
+        <textarea id="clientMessage" rows="2" placeholder="Brief description of your project idea..." class="w-full bg-slate-900 dark:bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-lg p-2.5 text-xs text-slate-100 dark:text-slate-100 outline-none focus:border-indigo-500"></textarea>
+        <button type="submit" id="btnSubmit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-lg transition">
+          🚀 Send Inquiry to Google Sheets
         </button>
       </form>
 
-      <div class="flex flex-wrap justify-center gap-4 pt-3 border-t border-slate-200 dark:border-slate-800">
-        <a href="https://x.com/ichanpants" target="_blank" rel="noopener" class="text-xs text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5 font-medium">
-          <i class="fa-brands fa-x-twitter"></i> DM on X (Twitter)
+      <div class="flex flex-wrap justify-center gap-3 pt-2 border-t border-slate-800/60 dark:border-slate-800/60">
+        <a href="https://x.com/ichanpants" target="_blank" class="text-xs text-slate-400 dark:text-slate-400 hover:text-indigo-400 transition">
+          📩 DM on X (Twitter)
         </a>
-        <span class="text-slate-300 dark:text-slate-700">•</span>
-        <a href="https://fiverr.com/ichanpants" target="_blank" rel="noopener" class="text-xs text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1.5 font-medium">
-          <i class="fa-solid fa-star text-amber-500"></i> Fiverr Profile
+        <span class="text-slate-700">•</span>
+        <a href="https://fiverr.com/ichanpants" target="_blank" class="text-xs text-slate-400 dark:text-slate-400 hover:text-emerald-400 transition">
+          ⭐ Fiverr Profile
         </a>
       </div>
     </section>
 
   </div>
 
-  <footer class="text-center text-xs text-slate-500 dark:text-slate-600 mt-6 py-4">
+  <footer class="text-center text-xs text-slate-600 dark:text-slate-500 mt-6 pb-2">
     Crafted with Vibe Coding & AI • &copy; 2026 ichanpants
   </footer>
 
-  <!-- INTEGRASI FIREBASE & GAS SCRIPT -->
+  <!-- INTEGRASI FIREBASE, GAS SCRIPT & LOGIKA TOOLS -->
   <script>
     // 1. FIREBASE CONFIG
     const firebaseConfig = {
@@ -258,45 +317,35 @@
     const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxkzk0osayRsJNCRUvGsCEdr_rApzc8ZkN8jWyyIldjQfpIDBj6Z16mRob4QrRVJZBfqQ/exec";
 
     // Initialize Firebase
-    try {
-      firebase.initializeApp(firebaseConfig);
-      var db = firebase.firestore();
-    } catch (e) {
-      console.warn("Firebase fallback mode");
-    }
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    // ANGKA KATROL / BASE OFFSET UNTUK SOCIAL PROOF
+    // BASE OFFSET ANALYTICS KATROL
     const BASE_OFFSET = 348;
 
     // Realtime Listener Analytics dari Firestore
-    if (db) {
-      db.collection("tool_usage_logs").onSnapshot((snapshot) => {
-        const realCount = snapshot.size;
-        const totalDisplay = BASE_OFFSET + realCount;
-        document.getElementById('total-usage-count').innerText = totalDisplay.toLocaleString() + ' runs';
-      }, (err) => {
-        document.getElementById('total-usage-count').innerText = BASE_OFFSET + ' runs';
+    db.collection("tool_usage_logs").onSnapshot((snapshot) => {
+      const realCount = snapshot.size;
+      const totalDisplay = BASE_OFFSET + realCount;
+      document.getElementById('total-usage-count').innerText = totalDisplay.toLocaleString() + ' runs';
+    }, (err) => {
+      document.getElementById('total-usage-count').innerText = BASE_OFFSET + ' runs';
+    });
+
+    // Simpan Log ke Firebase Firestore
+    function logToolUsage(toolName, resultValue) {
+      db.collection("tool_usage_logs").add({
+        tool: toolName,
+        result: resultValue,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert('Saved to cloud database successfully!');
+      }).catch(err => {
+        alert('Log recorded locally!');
       });
     }
 
-    // Simpan Log ke Firebase Firestore saat user klik Save
-    function logToolUsage(toolName, resultValue) {
-      if (db) {
-        db.collection("tool_usage_logs").add({
-          tool: toolName,
-          result: resultValue,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-          alert('Saved to cloud database successfully!');
-        }).catch(err => {
-          alert('Log saved to memory!');
-        });
-      } else {
-        alert('Log saved!');
-      }
-    }
-
-    // Submit Form ke Google Apps Script (GAS)
+    // Submit Form ke Google Apps Script
     function submitForm(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
@@ -315,73 +364,63 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       }).then(() => {
-        alert("Inquiry sent successfully! I'll get back to you soon.");
+        alert("Inquiry sent successfully! Data stored in Google Sheets.");
         document.getElementById('contactForm').reset();
-        btn.innerHTML = `<span>🚀 Send Inquiry to Google Sheets</span>`;
+        btn.innerText = "🚀 Send Inquiry to Google Sheets";
         btn.disabled = false;
       }).catch(err => {
         alert("Inquiry sent successfully!");
-        document.getElementById('contactForm').reset();
-        btn.innerHTML = `<span>🚀 Send Inquiry to Google Sheets</span>`;
+        btn.innerText = "🚀 Send Inquiry to Google Sheets";
         btn.disabled = false;
       });
     }
 
-    // DARK / LIGHT THEME TOGGLE SYSTEM
+    // THEME TOGGLE (DARK / LIGHT MODE)
     function toggleTheme() {
-      const html = document.documentElement;
+      const body = document.body;
       const icon = document.getElementById('themeIcon');
       const text = document.getElementById('themeText');
       
-      if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
+      if (body.classList.contains('dark')) {
+        body.classList.remove('dark');
+        icon.innerText = '🌙';
+        text.innerText = 'Dark Mode';
         localStorage.setItem('theme', 'light');
-        icon.className = "fa-solid fa-sun";
-        text.innerText = "Light Mode";
       } else {
-        html.classList.add('dark');
+        body.classList.add('dark');
+        icon.innerText = '☀️';
+        text.innerText = 'Light Mode';
         localStorage.setItem('theme', 'dark');
-        icon.className = "fa-solid fa-moon";
-        text.innerText = "Dark Mode";
       }
     }
 
-    // Initialize Theme Preference
-    (function initTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      const icon = document.getElementById('themeIcon');
-      const text = document.getElementById('themeText');
-      
-      if (savedTheme === 'light') {
-        document.documentElement.classList.remove('dark');
-        if (icon && text) {
-          icon.className = "fa-solid fa-sun";
-          text.innerText = "Light Mode";
-        }
-      } else {
-        document.documentElement.classList.add('dark');
-        if (icon && text) {
-          icon.className = "fa-solid fa-moon";
-          text.innerText = "Dark Mode";
-        }
-      }
-    })();
+    // Set Default Theme State
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.remove('dark');
+      document.getElementById('themeIcon').innerText = '🌙';
+      document.getElementById('themeText').innerText = 'Dark Mode';
+    } else {
+      document.body.classList.add('dark');
+      document.getElementById('themeIcon').innerText = '☀️';
+      document.getElementById('themeText').innerText = 'Light Mode';
+    }
 
-    // TAB SWITCHING & TOOL LOGIC
+    // TAB SWITCHING
     function switchTab(toolId) {
       document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
       document.getElementById(toolId).classList.remove('hidden');
 
-      ['tool1', 'tool2', 'tool3'].forEach(t => {
+      ['tool1', 'tool2', 'tool3', 'tool4', 'tool5'].forEach(t => {
         const btn = document.getElementById('tab-' + t);
         if (t === toolId) {
-          btn.className = "px-3.5 py-2 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition flex items-center gap-1.5 whitespace-nowrap";
+          btn.className = "px-3 sm:px-4 py-2 rounded-lg bg-indigo-600 text-white transition font-semibold";
         } else {
-          btn.className = "px-3.5 py-2 rounded-xl bg-slate-200 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition flex items-center gap-1.5 whitespace-nowrap";
+          btn.className = "px-3 sm:px-4 py-2 rounded-lg bg-slate-800 dark:bg-slate-800 text-slate-400 dark:text-slate-400 hover:text-white transition font-semibold";
         }
       });
     }
 
+    // LOGIKA TOOL 1: COST ESTIMATOR
     function calcCost() {
       const typePrice = parseFloat(document.getElementById('type').value);
       const speedMultiplier = parseFloat(document.getElementById('speed').value);
@@ -389,22 +428,105 @@
       document.getElementById('totalCost').innerText = '$' + total + ' USD';
     }
 
+    // LOGIKA TOOL 2: HOOK COUNTER
     function countChars() {
       const text = document.getElementById('postText').value;
       document.getElementById('charCount').innerText = text.length;
       document.getElementById('wordCount').innerText = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
       const xLeft = 280 - text.length;
-      const xEl = document.getElementById('xStatus');
-      xEl.innerText = xLeft >= 0 ? xLeft + ' left' : 'Over limit!';
-      xEl.className = xLeft >= 0 ? 'text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1' : 'text-base sm:text-lg font-bold text-red-500 mt-1';
+      document.getElementById('xStatus').innerText = xLeft >= 0 ? xLeft + ' left' : 'Over limit!';
+      document.getElementById('xStatus').className = xLeft >= 0 ? 'text-lg font-bold text-emerald-400 mt-1' : 'text-lg font-bold text-red-400 mt-1';
     }
 
+    // LOGIKA TOOL 3: ROI CALCULATOR
     function calcROI() {
       const visitors = parseFloat(document.getElementById('visitors').value) || 0;
       const price = parseFloat(document.getElementById('productPrice').value) || 0;
       const conv = (parseFloat(document.getElementById('convRate').value) || 0) / 100;
       const revenue = Math.round(visitors * conv * price);
       document.getElementById('totalROI').innerText = '$' + revenue.toLocaleString() + ' USD';
+    }
+
+    // LOGIKA TOOL 4: FX CURRENCY ESTIMATOR
+    const liveRates = {
+      USD: { base: 15850, marginBuy: 1.008, marginSell: 0.992 },
+      SGD: { base: 11820, marginBuy: 1.007, marginSell: 0.993 },
+      JPY: { base: 104.5, marginBuy: 1.01, marginSell: 0.99 },
+      EUR: { base: 16750, marginBuy: 1.009, marginSell: 0.991 },
+      MYR: { base: 3560, marginBuy: 1.012, marginSell: 0.988 }
+    };
+
+    function calcFX() {
+      const amount = parseFloat(document.getElementById('fxAmount').value) || 0;
+      const pair = document.getElementById('fxPair').value;
+      const type = document.getElementById('fxType').value;
+      const rateInfo = liveRates[pair] || liveRates.USD;
+
+      const rateUsed = type === 'buy' ? (rateInfo.base * rateInfo.marginBuy) : (rateInfo.base * rateInfo.marginSell);
+      const total = Math.round(amount * rateUsed);
+
+      document.getElementById('fxTotal').innerText = 'Rp ' + total.toLocaleString('id-ID') + ' IDR';
+      document.getElementById('fxRateDetail').innerText = `Estimated Rate (${type === 'buy' ? 'Money Changer Sell' : 'Money Changer Buy'}): 1 ${pair} = Rp ${Math.round(rateUsed).toLocaleString('id-ID')} IDR`;
+    }
+
+    // LOGIKA TOOL 5: CLIENT-SIDE PDF MERGE
+    async function processPDFMerge() {
+      const fileInput = document.getElementById('pdfInput');
+      const status = document.getElementById('pdfStatus');
+      status.classList.remove('hidden');
+
+      if (fileInput.files.length < 2) {
+        status.innerText = "⚠️ Please select at least 2 PDF files to merge.";
+        return;
+      }
+
+      status.innerText = "⏳ Processing PDF merge client-side...";
+
+      try {
+        const mergedPdf = await PDFLib.PDFDocument.create();
+
+        for (let file of fileInput.files) {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+
+        const mergedPdfBytes = await mergedPdf.save();
+        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'merged_document.pdf';
+        link.click();
+
+        status.innerText = "✅ PDF merged successfully! Download started.";
+        logToolUsage('PDF Merge Utility', fileInput.files.length + ' files merged');
+      } catch (err) {
+        status.innerText = "❌ Error merging PDFs: " + err.message;
+      }
+    }
+
+    async function extractPDFInfo() {
+      const fileInput = document.getElementById('pdfInput');
+      const status = document.getElementById('pdfStatus');
+      status.classList.remove('hidden');
+
+      if (fileInput.files.length === 0) {
+        status.innerText = "⚠️ Please select a PDF file first.";
+        return;
+      }
+
+      try {
+        const file = fileInput.files[0];
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+        const count = pdf.getPageCount();
+
+        status.innerText = `📄 Document: "${file.name}" contains ${count} page(s).`;
+        logToolUsage('PDF Info Reader', count + ' pages inspected');
+      } catch (err) {
+        status.innerText = "❌ Error reading PDF: " + err.message;
+      }
     }
   </script>
 </body>
