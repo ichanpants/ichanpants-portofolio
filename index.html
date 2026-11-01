@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mochtar | AI Web Developer & Automation Specialist</title>
+  <title>Mochtar | AI Web & Game Dev Specialist</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,7 +70,7 @@
       <div class="flex items-center gap-3">
         <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Available for Freelance
+          Available for Web, AI & Game Projects
         </div>
 
         <button id="themeToggle" onclick="toggleTheme()" class="p-2 rounded-full border border-white/10 bg-slate-800 text-slate-200 hover:border-indigo-500 transition text-xs">
@@ -80,26 +80,40 @@
     </div>
   </nav>
 
-  <div class="max-w-4xl mx-auto w-full space-y-12 px-4 pt-8 pb-16">
+  <div class="max-w-4xl mx-auto w-full space-y-12 px-4 pt-6 pb-16">
     
-    <!-- HERO SECTION -->
-    <section class="space-y-6 pt-4 text-center sm:text-left">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono">
-        <span>🚀 Level 2 Seller & AI Web Developer</span>
+    <!-- HERO SECTION WITH BANNER IMAGE -->
+    <section class="space-y-6 pt-2 text-center sm:text-left">
+      
+      <!-- HERO BANNER IMAGE (PRESERVED & STYLED) -->
+      <div class="relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl glow-card p-2 bg-slate-900">
+        <img src="Vibe Coding di Studio Neon.png" 
+             alt="Vibe Coding AI Web & Game Development" 
+             class="w-full h-auto rounded-2xl block object-cover max-h-[350px]"
+             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'p-8 text-center bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white rounded-2xl\'><h2 class=\'text-2xl font-bold\'>⚡ AI Web & Game Development Studio</h2><p class=\'text-xs text-indigo-200 mt-1\'>Building Interactive Game Scenes, AI Logic & Web Apps</p></div>';" />
+      </div>
+
+      <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono">
+          <span>🚀 Level 2 Seller & AI Web Developer</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono">
+          <span>🎮 Game Dev & Mechanics Evaluator</span>
+        </div>
       </div>
       
       <div class="space-y-4">
-        <h1 class="text-3xl sm:text-6xl font-extrabold tracking-tight leading-tight text-white">
-          Designing AI Web Apps <br class="hidden sm:inline"/>
-          <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">that convert & scale fast.</span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-white">
+          Designing AI Web Apps & <br class="hidden sm:inline"/>
+          <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Interactive Game Systems.</span>
         </h1>
         <p class="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Hi, I'm Mochtar 👋 — I help founders, businesses, and creators build high-converting landing pages, custom web tools, and automated workflows delivered under 24 hours.
+          Hi, I'm Mochtar 👋 — I help founders, businesses, and platform creators build high-converting web apps, automated workflows, and interactive game mechanics (Roblox Studio, Minecraft Redstone logic, and HTML5 browser games).
         </p>
       </div>
 
       <!-- METRICS & STATS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
         <div class="glow-card p-4 rounded-2xl">
           <div class="text-xs text-slate-400 font-mono">Execution Speed</div>
           <div class="text-xl sm:text-2xl font-bold text-indigo-400 mt-1 font-mono">&lt; 24 Hours</div>
@@ -108,24 +122,97 @@
           <div class="text-xs text-slate-400 font-mono">Tool Executions</div>
           <div id="total-usage-count" class="text-xl sm:text-2xl font-bold text-emerald-400 mt-1 font-mono">348 runs</div>
         </div>
-        <div class="col-span-2 sm:col-span-1 glow-card p-4 rounded-2xl">
-          <div class="text-xs text-slate-400 font-mono">Client Satisfaction</div>
-          <div class="text-xl sm:text-2xl font-bold text-amber-400 mt-1 font-mono">5.0 ★ Top Rated</div>
+        <div class="glow-card p-4 rounded-2xl">
+          <div class="text-xs text-slate-400 font-mono">Game Systems</div>
+          <div class="text-xl sm:text-2xl font-bold text-purple-400 mt-1 font-mono">QA & Mechanics</div>
+        </div>
+        <div class="glow-card p-4 rounded-2xl">
+          <div class="text-xs text-slate-400 font-mono">Client Rating</div>
+          <div class="text-xl sm:text-2xl font-bold text-amber-400 mt-1 font-mono">5.0 ★ Rated</div>
         </div>
       </div>
     </section>
 
-    <!-- LIVE INTERACTIVE TOOLS (Bento Style) -->
+    <!-- NEW SECTION: GAME DEVELOPMENT & INTERACTIVE MECHANICS SHOWCASE -->
+    <section class="space-y-6">
+      <div class="border-b border-white/10 pb-4">
+        <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+          <span>🎮</span> Game Development & Interactive Systems
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          Building sandbox environments, mechanics debugging, and scenario-based game logic for AI training & interactive media.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4">
+        <!-- GAME CARD 1: ROBLOX / SANDBOX LOGIC -->
+        <div class="glow-card p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-full">Roblox Studio</span>
+              <span class="text-xs text-slate-500 font-mono">Lua / Engine</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-base">Interactive Mechanics & Scenarios</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Experience designing interactive obstacle courses (Obbies), game logic, and sandbox environments in Roblox Studio and Blox Fruits environments.
+            </p>
+          </div>
+          <div class="pt-2 text-[11px] font-mono text-slate-400 border-t border-white/5 flex justify-between">
+            <span>• Mechanics Testing</span>
+            <span>• Gameplay Debugging</span>
+          </div>
+        </div>
+
+        <!-- GAME CARD 2: MINECRAFT REDSTONE & LOGIC SYSTEMS -->
+        <div class="glow-card p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">Minecraft Systems</span>
+              <span class="text-xs text-slate-500 font-mono">Java & Bedrock</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-base">Logic Circuits & Redstone Builds</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Designing automated logic gates, redstone machinery, command block automation, and puzzle environments for system evaluation.
+            </p>
+          </div>
+          <div class="pt-2 text-[11px] font-mono text-slate-400 border-t border-white/5 flex justify-between">
+            <span>• Logic Gates</span>
+            <span>• Command Automation</span>
+          </div>
+        </div>
+
+        <!-- GAME CARD 3: WEB / HTML5 MINI GAMES & QA -->
+        <div class="glow-card p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full">HTML5 & Open World</span>
+              <span class="text-xs text-slate-500 font-mono">JS & Engine QA</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-base">Browser Games & Physics QA</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Building browser-based JS mini-games (quizzes, puzzle mechanics) and conducting playtesting/mechanics analysis in open-world titles (GTA V).
+            </p>
+          </div>
+          <div class="pt-2 text-[11px] font-mono text-slate-400 border-t border-white/5 flex justify-between">
+            <span>• Physics / Bug QA</span>
+            <span>• JS Mini-Games</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE INTERACTIVE TOOLS & GAME PLAYGROUND (Bento Style) -->
     <section class="space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
         <div>
           <h2 class="text-xl sm:text-2xl font-bold text-white">Live Micro-Tools Playground</h2>
-          <p class="text-xs sm:text-sm text-slate-400">Test client-side web apps built directly with AI & Vibe Coding.</p>
+          <p class="text-xs sm:text-sm text-slate-400">Test client-side web apps and interactive game modules built directly with AI.</p>
         </div>
         
         <!-- TABS -->
         <div class="flex flex-wrap gap-1.5 bg-slate-900 p-1 rounded-xl border border-white/10 text-xs font-semibold">
           <button onclick="switchTab('tool1')" id="tab-tool1" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition">🛠️ Estimator</button>
+          <button onclick="switchTab('tool4')" id="tab-tool4" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">🎮 Game Tester</button>
           <button onclick="switchTab('tool2')" id="tab-tool2" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">✍️ Counter</button>
           <button onclick="switchTab('tool3')" id="tab-tool3" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">📈 ROI Calc</button>
           <button onclick="switchTab('tool5')" id="tab-tool5" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">📄 PDF Tools</button>
@@ -151,6 +238,7 @@
               <select id="type" onchange="calcCost()" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-slate-100 outline-none focus:border-indigo-500">
                 <option value="100">Landing Page / Single Page Web ($100)</option>
                 <option value="200">Interactive Web App / Dashboard ($200)</option>
+                <option value="150">Interactive Game Scene / Mechanics Test ($150)</option>
                 <option value="150">Micro SaaS / Custom Tool ($150)</option>
               </select>
             </div>
@@ -171,6 +259,36 @@
             <button onclick="logToolUsage('Cost Estimator', document.getElementById('totalCost').innerText)" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-3 rounded-xl transition shadow-lg shadow-indigo-600/20">
               💾 Save Estimate to Cloud
             </button>
+          </div>
+        </div>
+
+        <!-- TOOL 4: GAME MECHANICS & BUG TESTING MODULE -->
+        <div id="tool4" class="tool-content hidden space-y-5">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-lg font-bold text-purple-400">🎮 Interactive Game QA & Bug Tester</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Test real-time game logic, hit-detection, and physics parameters.</p>
+            </div>
+            <span class="text-[10px] bg-purple-500/10 text-purple-300 px-2.5 py-1 rounded-full font-mono border border-purple-500/20">Canvas Sandbox</span>
+          </div>
+
+          <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-slate-300">Score / Obstacles Passed: <strong id="gameScore" class="text-purple-400 text-sm">0</strong></span>
+              <span class="text-slate-300">Physics Status: <strong id="gameStatus" class="text-emerald-400">Ready (Click to Jump)</strong></span>
+            </div>
+            
+            <!-- CANVAS INTERACTIVE GAME -->
+            <div class="relative w-full h-44 bg-slate-950 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center">
+              <canvas id="gameCanvas" width="500" height="176" class="w-full h-full cursor-pointer"></canvas>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+              <p class="text-slate-400">Click or press Spacebar on the canvas to trigger jump mechanic & test collision logic.</p>
+              <button onclick="logToolUsage('Game QA Sandbox', 'Score: ' + document.getElementById('gameScore').innerText)" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl transition font-semibold">
+                💾 Log QA Session
+              </button>
+            </div>
           </div>
         </div>
 
@@ -269,7 +387,7 @@
     <section class="glow-card rounded-3xl p-6 sm:p-10 space-y-6 relative">
       <div class="max-w-xl mx-auto text-center space-y-2">
         <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Let's Build Something Great Together</h2>
-        <p class="text-xs sm:text-sm text-slate-400">Have a custom project or workflow automation in mind? Send your inquiry directly below.</p>
+        <p class="text-xs sm:text-sm text-slate-400">Have a custom web project, game mechanics task, or AI evaluation workflow in mind? Send your inquiry directly below.</p>
       </div>
 
       <form id="contactForm" onsubmit="submitForm(event)" class="space-y-4 max-w-md mx-auto">
@@ -410,14 +528,20 @@
       document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
       document.getElementById(toolId).classList.remove('hidden');
 
-      ['tool1', 'tool2', 'tool3', 'tool5'].forEach(t => {
+      ['tool1', 'tool2', 'tool3', 'tool4', 'tool5'].forEach(t => {
         const btn = document.getElementById('tab-' + t);
-        if (t === toolId) {
-          btn.className = "px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold transition";
-        } else {
-          btn.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition";
+        if (btn) {
+          if (t === toolId) {
+            btn.className = "px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold transition";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition";
+          }
         }
       });
+
+      if (toolId === 'tool4' && !window.gameInitialized) {
+        initGameCanvas();
+      }
     }
 
     function calcCost() {
@@ -501,6 +625,89 @@
       } catch (err) {
         status.innerText = "❌ Error reading PDF: " + err.message;
       }
+    }
+
+    // GAME QA CANVAS ENGINE
+    function initGameCanvas() {
+      window.gameInitialized = true;
+      const canvas = document.getElementById('gameCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      let player = { x: 40, y: 120, width: 24, height: 24, vy: 0, gravity: 0.6, jumping: false };
+      let obstacle = { x: canvas.width, y: 124, width: 18, height: 20, speed: 3.5 };
+      let score = 0;
+      let animId;
+
+      function jump() {
+        if (!player.jumping) {
+          player.vy = -10;
+          player.jumping = true;
+        }
+      }
+
+      canvas.addEventListener('click', jump);
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !document.getElementById('tool4').classList.contains('hidden')) {
+          jump();
+        }
+      });
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Ground line
+        ctx.strokeStyle = '#334155';
+        ctx.beginPath();
+        ctx.moveTo(0, 144);
+        ctx.lineTo(canvas.width, 144);
+        ctx.stroke();
+
+        // Player physics update
+        player.vy += player.gravity;
+        player.y += player.vy;
+        if (player.y >= 120) {
+          player.y = 120;
+          player.vy = 0;
+          player.jumping = false;
+        }
+
+        // Draw Player
+        ctx.fillStyle = '#818cf8';
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+
+        // Move & Draw Obstacle
+        obstacle.x -= obstacle.speed;
+        if (obstacle.x + obstacle.width < 0) {
+          obstacle.x = canvas.width;
+          score++;
+          document.getElementById('gameScore').innerText = score;
+        }
+        ctx.fillStyle = '#f43f5e';
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+        // Collision Check
+        if (
+          player.x < obstacle.x + obstacle.width &&
+          player.x + player.width > obstacle.x &&
+          player.y < obstacle.y + obstacle.height &&
+          player.y + player.height > obstacle.y
+        ) {
+          document.getElementById('gameStatus').innerText = 'Collision Detected! Resetting...';
+          document.getElementById('gameStatus').className = 'text-red-400 font-bold animate-pulse';
+          obstacle.x = canvas.width;
+          score = 0;
+          document.getElementById('gameScore').innerText = score;
+          setTimeout(() => {
+            document.getElementById('gameStatus').innerText = 'Ready (Click to Jump)';
+            document.getElementById('gameStatus').className = 'text-emerald-400';
+          }, 1200);
+        }
+
+        animId = requestAnimationFrame(loop);
+      }
+
+      loop();
     }
   </script>
 </body>
