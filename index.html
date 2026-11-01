@@ -1,714 +1,1058 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mochtar | AI Web & Game Dev Specialist</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Firebase SDK (v9 Compatibility Mode) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <!-- PDF-Lib for Client-Side PDF Utilities -->
-  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ichan – Game developer, gameplay tester, vibe coder</title>
+<meta name="description" content="A playable build with three seeded gameplay bugs, bug reports with repro steps and fixes, and automated checks. Portfolio of Ichan (ichanpants).">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<script>
+  try { document.documentElement.dataset.theme = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
+</script>
+<style>
+  /* Palette comes from the banner: deep navy, magenta-purple, cyan. */
+  :root {
+    --bg: #0b0d24;
+    --panel: #141838;
+    --line: #2b3266;
+    --text: #eef0ff;
+    --muted: #a3a9d6;
+    --accent: #e052ff;
+    --accent-2: #2ee6ff;
+    --on-accent: #14082b;
+    --pass: #4cc38a;
+    --bug: #ff5d7a;
+    --code-bg: #0a0c20;
+    --glow: 0 0 26px rgba(224, 82, 255, 0.35);
+    --font: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  [data-theme="light"] {
+    --bg: #e9e8f7;
+    --panel: #f6f5fd;
+    --line: #c2c0e0;
+    --text: #1a1838;
+    --muted: #55527a;
+    --accent: #a21fd1;
+    --accent-2: #086b80;
+    --on-accent: #ffffff;
+    --pass: #1b7a4b;
+    --bug: #c2261f;
+    --code-bg: #eeedf9;
+    --glow: 0 4px 16px rgba(162, 31, 209, 0.2);
+  }
 
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              500: '#3b82f6',
-              600: '#2563eb',
-              900: '#0f172a',
-              950: '#070a11',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    .glow-card {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .glow-card:hover {
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.15);
-    }
-    .dark .glow-card {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .dark .glow-card:hover {
-      border-color: rgba(129, 140, 248, 0.4);
-    }
-  </style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+  h1, h2, h3 { font-stretch: 125%; font-weight: 800; line-height: 1.05; letter-spacing: -0.015em; margin: 0; }
+  h4 { margin: 0 0 6px; font-size: 0.95rem; font-weight: 700; }
+  p { margin: 0; }
+  kbd { font-family: var(--mono); font-size: 0.85em; padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 3px; background: var(--panel); }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  /* Buttons and inputs */
+  .btn {
+    display: inline-block;
+    font: inherit; font-weight: 700; font-size: 0.95rem;
+    padding: 10px 18px;
+    border-radius: 4px;
+    border: 2px solid var(--accent);
+    background: var(--accent); color: var(--on-accent);
+    cursor: pointer; text-decoration: none; line-height: 1.3;
+  }
+  .btn { box-shadow: var(--glow); }
+  .btn:hover { filter: brightness(1.1); }
+  .btn:disabled { opacity: 0.6; cursor: wait; }
+  .btn.ghost { background: transparent; color: var(--text); border-color: var(--accent-2); box-shadow: none; }
+  .btn.ghost:hover { background: var(--accent-2); color: var(--bg); filter: none; }
+  .btn.small { padding: 7px 12px; font-size: 0.85rem; }
+  .field { display: grid; gap: 6px; font-size: 0.92rem; }
+  .field label { font-weight: 600; }
+  .input, select.input, textarea.input {
+    width: 100%; font: inherit; color: var(--text);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px;
+  }
+  textarea.input { resize: vertical; }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .brand { font-stretch: 125%; font-weight: 800; font-size: 1.1rem; text-decoration: none; }
+  .nav { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; font-size: 0.92rem; }
+  .nav a { color: var(--muted); text-decoration: none; }
+  .nav a:hover { color: var(--text); }
+
+  /* Banner */
+  .banner { margin: 28px 0 0; border: 1px solid var(--accent); border-radius: 4px; overflow: hidden; box-shadow: var(--glow); background: #0b0d24; }
+  .banner[hidden] { display: none; }
+  .banner img { display: block; width: 100%; height: auto; }
+
+  /* Hero */
+  .hero { padding: 40px 0 48px; display: grid; gap: 26px; }
+  .hero h1 { font-size: clamp(2.1rem, 5.8vw, 4.2rem); max-width: 19ch; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 62ch; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* Sections */
+  .block { padding: 56px 0; border-top: 1px solid var(--line); }
+  .block > h2 { font-size: clamp(1.6rem, 3.6vw, 2.4rem); margin-bottom: 12px; }
+  .intro { color: var(--muted); max-width: 64ch; margin-bottom: 28px; }
+
+  /* Playtest */
+  .play { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
+  .stage { position: relative; background: #0e1030; border: 1px solid var(--accent); border-radius: 2px; overflow: hidden; box-shadow: var(--glow); }
+  canvas { display: block; width: 100%; height: auto; aspect-ratio: 5 / 3; outline-offset: -4px; touch-action: manipulation; }
+  .overlay {
+    position: absolute; inset: 0; width: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 6px;
+    padding: 28px; border: 0; text-align: left; cursor: pointer; font: inherit; color: #f1f2f3;
+    background: linear-gradient(to top, rgba(20, 22, 26, 0.94), rgba(20, 22, 26, 0.4));
+  }
+  .overlay[hidden] { display: none; }
+  .overlay strong { font-stretch: 125%; font-weight: 800; font-size: clamp(1.3rem, 3.4vw, 2.1rem); line-height: 1.1; }
+  .overlay span { color: #cfd3d8; }
+  .how { margin-top: 12px; color: var(--muted); font-size: 0.92rem; }
+  .notes { margin-top: 10px; color: var(--muted); font-size: 0.88rem; max-width: 70ch; }
+
+  .touch { display: none; justify-content: space-between; align-items: center; margin-top: 14px; }
+  @media (pointer: coarse) { .touch { display: flex; } }
+  .dpad { display: grid; grid-template-columns: repeat(3, 58px); grid-template-rows: repeat(3, 58px); gap: 4px; }
+  .touch button { touch-action: none; user-select: none; -webkit-user-select: none; font: inherit; font-weight: 700; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+  .touch button:active { background: var(--accent); color: var(--on-accent); }
+  .dpad .u { grid-area: 1 / 2; } .dpad .l { grid-area: 2 / 1; } .dpad .r { grid-area: 2 / 3; } .dpad .d { grid-area: 3 / 2; }
+  .touch .dash { width: 92px; height: 92px; border-radius: 50%; }
+
+  .side { display: grid; gap: 26px; }
+  .side h3 { font-size: 1rem; font-stretch: 112%; margin-bottom: 10px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .seg button { padding: 10px 8px; background: transparent; color: var(--text); border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-checked="true"] { background: var(--accent); color: var(--on-accent); }
+  .seg { border-color: var(--accent-2); }
+  .mix { margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 0.93rem; cursor: pointer; }
+  .check input { margin-top: 0.3em; accent-color: var(--accent); }
+  .tele { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 0; font-family: var(--mono); font-size: 0.88rem; }
+  .tele dt { color: var(--muted); }
+  .tele dd { margin: 0; text-align: right; }
+  .tele dd.warn { color: var(--bug); font-weight: 700; }
+
+  /* Bug reports */
+  .report { border-top: 1px solid var(--line); }
+  .report:last-of-type { border-bottom: 1px solid var(--line); }
+  .report summary { list-style: none; display: grid; grid-template-columns: 84px minmax(0, 1fr) auto 24px; gap: 12px; align-items: baseline; padding: 18px 4px; cursor: pointer; }
+  .report summary::-webkit-details-marker { display: none; }
+  .report summary::after { content: "+"; font-size: 1.3rem; line-height: 1; text-align: right; color: var(--muted); }
+  .report[open] summary::after { content: "–"; }
+  .rid { font-family: var(--mono); font-weight: 700; color: var(--accent-2); }
+  .rtitle { font-stretch: 112%; font-weight: 700; font-size: 1.12rem; line-height: 1.3; }
+  .sev { font-size: 0.88rem; color: var(--muted); }
+  .rbody { display: grid; gap: 24px; padding: 4px 4px 32px 100px; }
+  .quote { margin: 0; padding-left: 14px; border-left: 3px solid var(--accent); font-style: italic; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .rbody ol, .rbody ul { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+  .rbody .muted { color: var(--muted); }
+  pre { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; overflow-x: auto; font: 0.85rem/1.6 var(--mono); }
+  pre .l { display: block; white-space: pre; }
+  pre .del { color: var(--bug); }
+  pre .add { color: var(--pass); }
+
+  /* Checks table */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; }
+  table { width: 100%; min-width: 860px; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 12px 14px; vertical-align: top; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: 0; }
+  th { background: var(--panel); color: var(--muted); font-weight: 700; }
+  .res { font-weight: 700; }
+  .res.pass { color: var(--pass); }
+  .res.fail { color: var(--bug); }
+  .detail { display: block; margin-top: 3px; font: 400 0.8rem/1.4 var(--mono); color: var(--muted); }
+  .checkbar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+
+  /* About */
+  .about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px; }
+  .about h2 { margin: 0; font-size: clamp(1.6rem, 3.6vw, 2.4rem); }
+  .about .copy { display: grid; gap: 16px; max-width: 62ch; }
+
+  /* Tools */
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .tabs button { font: inherit; font-weight: 600; font-size: 0.92rem; padding: 8px 14px; border-radius: 4px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+  .tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .toolbox { border: 1px solid var(--line); border-radius: 4px; background: var(--panel); padding: 22px; }
+  .tool[hidden] { display: none; }
+  .tool { display: grid; gap: 16px; max-width: 640px; }
+  .tool h3 { font-size: 1.15rem; font-stretch: 112%; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+  .stat { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 10px; font-size: 0.88rem; color: var(--muted); }
+  .stat strong { display: block; font-size: 1.3rem; color: var(--text); }
+  .result { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 16px; }
+  .result .big { font-stretch: 125%; font-weight: 800; font-size: 2rem; line-height: 1.1; }
+  .statusline { margin-top: 14px; min-height: 1.4em; font-size: 0.9rem; color: var(--muted); }
+  .log-note { font-size: 0.85rem; color: var(--muted); }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px; }
+  .contact h2 { margin: 0 0 12px; font-size: clamp(1.6rem, 3.6vw, 2.4rem); }
+  .links { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; font-size: 0.95rem; }
+  .links a { color: var(--muted); }
+  .links a:hover { color: var(--accent-2); }
+  form { display: grid; gap: 14px; max-width: 520px; }
+
+  footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; }
+
+  @media (max-width: 900px) {
+    .play, .about, .contact { grid-template-columns: 1fr; }
+    .about, .contact { gap: 20px; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 40px 0 32px; }
+    .block { padding: 40px 0; }
+    .report summary { grid-template-columns: 70px minmax(0, 1fr) 24px; }
+    .report summary .sev { display: none; }
+    .rbody { padding-left: 4px; }
+    .twocol, .row2 { grid-template-columns: 1fr; }
+    .toolbox { padding: 16px; }
+  }
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+<body>
+<div class="wrap">
 
-  <!-- NAVBAR STICKY (Framed Style) -->
-  <nav class="sticky top-4 z-50 max-w-4xl mx-auto w-full px-4">
-    <div class="bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-full px-5 py-3 flex justify-between items-center shadow-2xl">
-      <div class="flex items-center gap-3">
-        <span class="font-bold text-sm tracking-tight text-white flex items-center gap-2">
-          <span class="text-indigo-400">⚡</span> ichanpants.dev
-        </span>
-      </div>
+  <header class="top">
+    <a class="brand" href="#top">ichanpants</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#playtest">Playtest</a>
+      <a href="#reports">Bug reports</a>
+      <a href="#checks">Checks</a>
+      <a href="#tools">Other builds</a>
+      <a href="#contact">Contact</a>
+      <button class="btn ghost small" id="themeToggle" type="button">Light theme</button>
+    </nav>
+  </header>
 
-      <div class="flex items-center gap-3">
-        <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Available for Web, AI & Game Projects
-        </div>
+  <main id="top">
+    <noscript><p class="intro" style="padding-top:24px">This portfolio runs a playable game in your browser. Please enable JavaScript to play it.</p></noscript>
 
-        <button id="themeToggle" onclick="toggleTheme()" class="p-2 rounded-full border border-white/10 bg-slate-800 text-slate-200 hover:border-indigo-500 transition text-xs">
-          <span id="themeIcon">☀️</span>
-        </button>
-      </div>
-    </div>
-  </nav>
+    <figure class="banner" style="margin-bottom:0">
+      <img src="studio-neon-banner.webp" width="1600" height="640" alt="Ichan at his gaming desk with a laptop showing a game scene. Banner text: Vibe Coding and AI Web Development, 24-hour delivery, landing pages and web apps, game developer." onerror="this.closest('.banner').hidden = true">
+    </figure>
 
-  <div class="max-w-4xl mx-auto w-full space-y-12 px-4 pt-6 pb-16">
-    
-    <!-- HERO SECTION WITH BANNER IMAGE -->
-    <section class="space-y-6 pt-2 text-center sm:text-left">
-      
-      <!-- HERO BANNER IMAGE (PRESERVED & STYLED) -->
-      <div class="relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl glow-card p-2 bg-slate-900">
-        <img src="Vibe Coding di Studio Neon.png" 
-             alt="Vibe Coding AI Web & Game Development" 
-             class="w-full h-auto rounded-2xl block object-cover max-h-[350px]"
-             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'p-8 text-center bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white rounded-2xl\'><h2 class=\'text-2xl font-bold\'>⚡ AI Web & Game Development Studio</h2><p class=\'text-xs text-indigo-200 mt-1\'>Building Interactive Game Scenes, AI Logic & Web Apps</p></div>';" />
-      </div>
-
-      <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono">
-          <span>🚀 Level 2 Seller & AI Web Developer</span>
-        </div>
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono">
-          <span>🎮 Game Dev & Mechanics Evaluator</span>
-        </div>
-      </div>
-      
-      <div class="space-y-4">
-        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-white">
-          Designing AI Web Apps & <br class="hidden sm:inline"/>
-          <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Interactive Game Systems.</span>
-        </h1>
-        <p class="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Hi, I'm Mochtar 👋 — I help founders, businesses, and platform creators build high-converting web apps, automated workflows, and interactive game mechanics (Roblox Studio, Minecraft Redstone logic, and HTML5 browser games).
-        </p>
-      </div>
-
-      <!-- METRICS & STATS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-        <div class="glow-card p-4 rounded-2xl">
-          <div class="text-xs text-slate-400 font-mono">Execution Speed</div>
-          <div class="text-xl sm:text-2xl font-bold text-indigo-400 mt-1 font-mono">&lt; 24 Hours</div>
-        </div>
-        <div class="glow-card p-4 rounded-2xl">
-          <div class="text-xs text-slate-400 font-mono">Tool Executions</div>
-          <div id="total-usage-count" class="text-xl sm:text-2xl font-bold text-emerald-400 mt-1 font-mono">348 runs</div>
-        </div>
-        <div class="glow-card p-4 rounded-2xl">
-          <div class="text-xs text-slate-400 font-mono">Game Systems</div>
-          <div class="text-xl sm:text-2xl font-bold text-purple-400 mt-1 font-mono">QA & Mechanics</div>
-        </div>
-        <div class="glow-card p-4 rounded-2xl">
-          <div class="text-xs text-slate-400 font-mono">Client Rating</div>
-          <div class="text-xl sm:text-2xl font-bold text-amber-400 mt-1 font-mono">5.0 ★ Rated</div>
-        </div>
+    <section class="hero">
+      <h1>I play games until they break, then I write down exactly how.</h1>
+      <p class="lead">Game on. I’m a hardcore gamer turning a lifetime of noticing what feels wrong into a craft. The build below is mine: plain JavaScript, three bugs I planted on purpose, a bug report and fix for each, and automated checks that prove the fixes hold.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#playtest">Play the build</a>
+        <a class="btn ghost" href="#reports">Read the bug reports</a>
       </div>
     </section>
 
-    <!-- NEW SECTION: GAME DEVELOPMENT & INTERACTIVE MECHANICS SHOWCASE -->
-    <section class="space-y-6">
-      <div class="border-b border-white/10 pb-4">
-        <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
-          <span>🎮</span> Game Development & Interactive Systems
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1">
-          Building sandbox environments, mechanics debugging, and scenario-based game logic for AI training & interactive media.
-        </p>
-      </div>
+    <!-- PLAYTEST -->
+    <section class="block" id="playtest">
+      <h2>Playtest build 0.3</h2>
+      <p class="intro">Grab the gems, dodge the orbs, dash with Space. This build ships with three bugs. Play a few rounds, see what feels off, then flip to the fixed build and feel the difference.</p>
 
-      <div class="grid sm:grid-cols-3 gap-4">
-        <!-- GAME CARD 1: ROBLOX / SANDBOX LOGIC -->
-        <div class="glow-card p-5 rounded-2xl space-y-3 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-full">Roblox Studio</span>
-              <span class="text-xs text-slate-500 font-mono">Lua / Engine</span>
-            </div>
-            <h3 class="font-bold text-slate-100 text-base">Interactive Mechanics & Scenarios</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Experience designing interactive obstacle courses (Obbies), game logic, and sandbox environments in Roblox Studio and Blox Fruits environments.
-            </p>
-          </div>
-          <div class="pt-2 text-[11px] font-mono text-slate-400 border-t border-white/5 flex justify-between">
-            <span>• Mechanics Testing</span>
-            <span>• Gameplay Debugging</span>
-          </div>
-        </div>
-
-        <!-- GAME CARD 2: MINECRAFT REDSTONE & LOGIC SYSTEMS -->
-        <div class="glow-card p-5 rounded-2xl space-y-3 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">Minecraft Systems</span>
-              <span class="text-xs text-slate-500 font-mono">Java & Bedrock</span>
-            </div>
-            <h3 class="font-bold text-slate-100 text-base">Logic Circuits & Redstone Builds</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Designing automated logic gates, redstone machinery, command block automation, and puzzle environments for system evaluation.
-            </p>
-          </div>
-          <div class="pt-2 text-[11px] font-mono text-slate-400 border-t border-white/5 flex justify-between">
-            <span>• Logic Gates</span>
-            <span>• Command Automation</span>
-          </div>
-        </div>
-
-        <!-- GAME CARD 3: WEB / HTML5 MINI GAMES & QA -->
-        <div class="glow-card p-5 rounded-2xl space-y-3 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full">HTML5 & Open World</span>
-              <span class="text-xs text-slate-500 font-mono">JS & Engine QA</span>
-            </div>
-            <h3 class="font-bold text-slate-100 text-base">Browser Games & Physics QA</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Building browser-based JS mini-games (quizzes, puzzle mechanics) and conducting playtesting/mechanics analysis in open-world titles (GTA V).
-            </p>
-          </div>
-          <div class="pt-2 text-[11px] font-mono text-slate-400 border-t border-white/5 flex justify-between">
-            <span>• Physics / Bug QA</span>
-            <span>• JS Mini-Games</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- LIVE INTERACTIVE TOOLS & GAME PLAYGROUND (Bento Style) -->
-    <section class="space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
+      <div class="play">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold text-white">Live Micro-Tools Playground</h2>
-          <p class="text-xs sm:text-sm text-slate-400">Test client-side web apps and interactive game modules built directly with AI.</p>
-        </div>
-        
-        <!-- TABS -->
-        <div class="flex flex-wrap gap-1.5 bg-slate-900 p-1 rounded-xl border border-white/10 text-xs font-semibold">
-          <button onclick="switchTab('tool1')" id="tab-tool1" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition">🛠️ Estimator</button>
-          <button onclick="switchTab('tool4')" id="tab-tool4" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">🎮 Game Tester</button>
-          <button onclick="switchTab('tool2')" id="tab-tool2" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">✍️ Counter</button>
-          <button onclick="switchTab('tool3')" id="tab-tool3" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">📈 ROI Calc</button>
-          <button onclick="switchTab('tool5')" id="tab-tool5" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">📄 PDF Tools</button>
-        </div>
-      </div>
-
-      <!-- MAIN INTERACTIVE CONTAINER -->
-      <div class="glow-card rounded-3xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl">
-        
-        <!-- TOOL 1: ESTIMATOR BIAYA -->
-        <div id="tool1" class="tool-content space-y-5">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="text-lg font-bold text-indigo-400">🛠️ Project Cost & Time Estimator</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Calculate fast turnarounds and budget transparently.</p>
-            </div>
-            <span class="text-[10px] bg-indigo-500/10 text-indigo-300 px-2.5 py-1 rounded-full font-mono border border-indigo-500/20">Instant Quote</span>
-          </div>
-
-          <div class="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-            <div>
-              <label class="block font-medium text-slate-300 mb-1.5">Project Scope:</label>
-              <select id="type" onchange="calcCost()" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-slate-100 outline-none focus:border-indigo-500">
-                <option value="100">Landing Page / Single Page Web ($100)</option>
-                <option value="200">Interactive Web App / Dashboard ($200)</option>
-                <option value="150">Interactive Game Scene / Mechanics Test ($150)</option>
-                <option value="150">Micro SaaS / Custom Tool ($150)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block font-medium text-slate-300 mb-1.5">Delivery Speed:</label>
-              <select id="speed" onchange="calcCost()" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-slate-100 outline-none focus:border-indigo-500">
-                <option value="1">Standard Delivery (48 Hours)</option>
-                <option value="1.3">Express Rush (24 Hours) (+30%)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="bg-indigo-950/30 border border-indigo-500/20 rounded-2xl p-5 text-center flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="text-left">
-              <span class="text-xs text-indigo-400 font-mono tracking-wider uppercase">Estimated Investment</span>
-              <div id="totalCost" class="text-3xl font-extrabold text-white">$100 USD</div>
-            </div>
-            <button onclick="logToolUsage('Cost Estimator', document.getElementById('totalCost').innerText)" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-3 rounded-xl transition shadow-lg shadow-indigo-600/20">
-              💾 Save Estimate to Cloud
+          <div class="stage" id="stage">
+            <canvas id="game" tabindex="0" aria-label="Playable game arena. Move with WASD or arrow keys, dash with Space."></canvas>
+            <button class="overlay" id="overlay" type="button">
+              <strong id="ovTitle">Playtest build 0.3</strong>
+              <span id="ovHint">Click here or press Space to start.</span>
             </button>
           </div>
+          <p class="how">Move with <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or the arrow keys. Dash with <kbd>Space</kbd>. Restart with <kbd>R</kbd>. Every 5 gems adds another orb.</p>
+          <div class="touch" aria-label="Touch controls">
+            <div class="dpad">
+              <button class="u" data-key="up" type="button" aria-label="Up">▲</button>
+              <button class="l" data-key="left" type="button" aria-label="Left">◀</button>
+              <button class="r" data-key="right" type="button" aria-label="Right">▶</button>
+              <button class="d" data-key="down" type="button" aria-label="Down">▼</button>
+            </div>
+            <button class="dash" id="touchDash" type="button">Dash</button>
+          </div>
+          <p class="notes">Built with hand-written JavaScript on an HTML canvas, not an engine. The game logic runs on a fixed 60 Hz timestep so the automated checks below can replay it exactly.</p>
         </div>
 
-        <!-- TOOL 4: GAME MECHANICS & BUG TESTING MODULE -->
-        <div id="tool4" class="tool-content hidden space-y-5">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="text-lg font-bold text-purple-400">🎮 Interactive Game QA & Bug Tester</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Test real-time game logic, hit-detection, and physics parameters.</p>
-            </div>
-            <span class="text-[10px] bg-purple-500/10 text-purple-300 px-2.5 py-1 rounded-full font-mono border border-purple-500/20">Canvas Sandbox</span>
-          </div>
-
-          <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 space-y-4">
-            <div class="flex justify-between items-center text-xs font-mono">
-              <span class="text-slate-300">Score / Obstacles Passed: <strong id="gameScore" class="text-purple-400 text-sm">0</strong></span>
-              <span class="text-slate-300">Physics Status: <strong id="gameStatus" class="text-emerald-400">Ready (Click to Jump)</strong></span>
-            </div>
-            
-            <!-- CANVAS INTERACTIVE GAME -->
-            <div class="relative w-full h-44 bg-slate-950 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center">
-              <canvas id="gameCanvas" width="500" height="176" class="w-full h-full cursor-pointer"></canvas>
-            </div>
-
-            <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
-              <p class="text-slate-400">Click or press Spacebar on the canvas to trigger jump mechanic & test collision logic.</p>
-              <button onclick="logToolUsage('Game QA Sandbox', 'Score: ' + document.getElementById('gameScore').innerText)" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl transition font-semibold">
-                💾 Log QA Session
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- TOOL 2: SOCIAL POST COUNTER -->
-        <div id="tool2" class="tool-content hidden space-y-5">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="text-lg font-bold text-indigo-400">✍️ Social Post & Hook Counter</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Optimize post copy for social media limits instantly.</p>
-            </div>
-          </div>
-
-          <textarea id="postText" oninput="countChars()" rows="4" placeholder="Type or paste your content script here..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3.5 text-xs sm:text-sm text-slate-100 outline-none focus:border-indigo-500"></textarea>
-          
-          <div class="grid grid-cols-3 gap-3 text-center text-xs">
-            <div class="bg-slate-900 p-3 rounded-xl border border-white/5">
-              <div class="text-slate-400 font-mono">Characters</div>
-              <div id="charCount" class="text-lg font-bold text-white mt-1">0</div>
-            </div>
-            <div class="bg-slate-900 p-3 rounded-xl border border-white/5">
-              <div class="text-slate-400 font-mono">Words</div>
-              <div id="wordCount" class="text-lg font-bold text-white mt-1">0</div>
-            </div>
-            <div class="bg-slate-900 p-3 rounded-xl border border-white/5">
-              <div class="text-slate-400 font-mono">X Limit</div>
-              <div id="xStatus" class="text-lg font-bold text-emerald-400 mt-1">280 left</div>
-            </div>
-          </div>
-          <button onclick="logToolUsage('Hook Counter', document.getElementById('charCount').innerText + ' chars')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs py-3 rounded-xl transition">
-            💾 Save Draft Log
-          </button>
-        </div>
-
-        <!-- TOOL 3: ROI CALCULATOR -->
-        <div id="tool3" class="tool-content hidden space-y-5">
+        <aside class="side" aria-label="Build controls and telemetry">
           <div>
-            <h3 class="text-lg font-bold text-indigo-400">📈 Business Revenue ROI Calc</h3>
-            <p class="text-xs text-slate-400 mt-0.5">Project potential monthly revenue conversion.</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm">
-            <div>
-              <label class="block font-medium text-slate-300 mb-1">Monthly Traffic:</label>
-              <input type="number" id="visitors" value="1000" oninput="calcROI()" class="w-full bg-slate-900 border border-white/10 rounded-xl p-2.5 text-slate-100 outline-none">
+            <h3>Build</h3>
+            <div class="seg" role="radiogroup" aria-label="Choose build">
+              <button type="button" role="radio" data-build="bugged" aria-checked="true">Bugged build</button>
+              <button type="button" role="radio" data-build="fixed" aria-checked="false">Fixed build</button>
             </div>
-            <div>
-              <label class="block font-medium text-slate-300 mb-1">Price ($):</label>
-              <input type="number" id="productPrice" value="50" oninput="calcROI()" class="w-full bg-slate-900 border border-white/10 rounded-xl p-2.5 text-slate-100 outline-none">
-            </div>
+            <p class="mix" id="mixNote" hidden>Custom mix of fixes.</p>
           </div>
           <div>
-            <label class="block font-medium text-slate-300 mb-1 text-xs">Conv Rate (%):</label>
-            <input type="number" id="convRate" value="2" step="0.5" oninput="calcROI()" class="w-full bg-slate-900 border border-white/10 rounded-xl p-2.5 text-xs text-slate-100 outline-none">
+            <h3>Fixes applied</h3>
+            <label class="check"><input type="checkbox" data-flag="normalizeDiagonal"> BUG-01 diagonal speed</label>
+            <label class="check"><input type="checkbox" data-flag="iFrames"> BUG-02 hit protection</label>
+            <label class="check"><input type="checkbox" data-flag="singleCollect"> BUG-03 double pickup</label>
           </div>
-          <div class="bg-emerald-950/30 border border-emerald-500/20 rounded-2xl p-4 text-center">
-            <span class="text-xs text-emerald-400 font-mono uppercase">Est. Monthly Revenue</span>
-            <div id="totalROI" class="text-3xl font-extrabold text-emerald-400 my-1">$1,000 USD</div>
-            <button onclick="logToolUsage('ROI Calculator', document.getElementById('totalROI').innerText)" class="mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition">
-              💾 Save ROI Calculation
-            </button>
+          <div>
+            <h3>Telemetry</h3>
+            <dl class="tele" aria-live="off">
+              <dt>Score</dt><dd id="tScore">0</dd>
+              <dt>Best</dt><dd id="tBest">0</dd>
+              <dt>Lives</dt><dd id="tLives">●●●</dd>
+              <dt>Move speed</dt><dd id="tSpeed">0 px/s</dd>
+              <dt>Dash</dt><dd id="tDash">Ready</dd>
+              <dt>Hit protection</dt><dd id="tProt">None</dd>
+            </dl>
           </div>
-        </div>
-
-        <!-- TOOL 5: CLIENT-SIDE PDF UTILITY -->
-        <div id="tool5" class="tool-content hidden space-y-5">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="text-lg font-bold text-indigo-400">📄 Private PDF Processing</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Merge or inspect PDFs locally. Zero server upload.</p>
-            </div>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-mono border border-emerald-500/20">100% Private</span>
+          <div>
+            <h3>Test tools</h3>
+            <label class="check"><input type="checkbox" id="optHitbox"> Show hitboxes</label>
+            <label class="check"><input type="checkbox" id="optSlow"> Slow motion (0.25×)</label>
           </div>
-
-          <div class="space-y-4 text-xs sm:text-sm">
-            <input type="file" id="pdfInput" multiple accept="application/pdf" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
-
-            <div class="grid sm:grid-cols-2 gap-3">
-              <button onclick="processPDFMerge()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl transition text-xs">
-                ⚡ Merge Selected PDFs
-              </button>
-              <button onclick="extractPDFInfo()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-3 rounded-xl transition text-xs border border-white/10">
-                🔍 Read Page Count
-              </button>
-            </div>
-
-            <div id="pdfStatus" class="hidden bg-slate-900 p-3 rounded-xl border border-white/10 text-xs font-mono text-slate-300">
-              Waiting for file...
-            </div>
-          </div>
-        </div>
-
+        </aside>
       </div>
     </section>
 
-    <!-- CONTACT / ORDER INQUIRY (Framed Box) -->
-    <section class="glow-card rounded-3xl p-6 sm:p-10 space-y-6 relative">
-      <div class="max-w-xl mx-auto text-center space-y-2">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Let's Build Something Great Together</h2>
-        <p class="text-xs sm:text-sm text-slate-400">Have a custom web project, game mechanics task, or AI evaluation workflow in mind? Send your inquiry directly below.</p>
+    <!-- BUG REPORTS -->
+    <section class="block" id="reports">
+      <h2>Bug reports</h2>
+      <p class="intro">Each report starts the way a player would send it, then gets traced to a cause. Open one, press “Reproduce in the build,” and watch it break.</p>
+
+      <details class="report" open>
+        <summary><span class="rid">BUG-01</span><span class="rtitle">Diagonal movement is faster than straight movement</span><span class="sev">Major</span></summary>
+        <div class="rbody">
+          <div><h4>Player report</h4><p class="quote">“Running into corners feels like a speed boost. I can zigzag past the red orbs and they never catch me.”</p></div>
+          <div><h4>Steps to reproduce</h4>
+            <ol>
+              <li>Press “Reproduce in the build” below.</li>
+              <li>Click the arena, then hold <kbd>D</kbd> and read Move speed in the sidebar.</li>
+              <li>Release, then hold <kbd>W</kbd> and <kbd>D</kbd> together and read Move speed again.</li>
+            </ol>
+          </div>
+          <div class="twocol">
+            <div><h4>Expected</h4><p>Move speed is 220 px/s in all eight directions.</p></div>
+            <div><h4>Actual</h4><p>220 px/s straight, 311 px/s diagonal (1.41 times faster). The readout turns red.</p></div>
+          </div>
+          <div><h4>Cause</h4><p>Holding two direction keys builds the vector (1, 1), whose length is √2. The game applied it as-is instead of scaling it back to length 1.</p></div>
+          <div><h4>Fix</h4>
+<pre><span class="l"> let mx = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);</span><span class="l"> let my = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);</span><span class="l add">+if (mx &amp;&amp; my) { const len = Math.hypot(mx, my); mx /= len; my /= len; }</span></pre>
+          </div>
+          <div><h4>Pass criteria</h4>
+            <ul>
+              <li>Move speed reads 220 px/s in all eight directions.</li>
+              <li>Check BUG-01 passes: diagonal and straight distances match within 2%.</li>
+              <li>Dash speed is unchanged at 660 px/s.</li>
+            </ul>
+          </div>
+          <div><button class="btn small" type="button" data-repro="normalizeDiagonal">Reproduce in the build</button></div>
+        </div>
+      </details>
+
+      <details class="report">
+        <summary><span class="rid">BUG-02</span><span class="rtitle">One orb touch ends the run</span><span class="sev">Critical</span></summary>
+        <div class="rbody">
+          <div><h4>Player report</h4><p class="quote">“I barely clipped an orb and got game over instantly. I didn’t even see my lives go down.”</p></div>
+          <div><h4>Steps to reproduce</h4>
+            <ol>
+              <li>Press “Reproduce in the build” below.</li>
+              <li>Turn on Slow motion (0.25×) so each frame is visible.</li>
+              <li>Steer into an orb and watch Lives and Hit protection in the sidebar.</li>
+            </ol>
+          </div>
+          <div class="twocol">
+            <div><h4>Expected</h4><p>Lose exactly one life. The player blinks for 1.2 s and cannot be hurt during that time.</p></div>
+            <div><h4>Actual</h4><p>Lives go 3, 2, 1, 0 on three consecutive frames (0.05 s). Hit protection stays at None.</p></div>
+          </div>
+          <div><h4>Cause</h4><p>Collision runs on every fixed update, 60 times a second, and nothing records that the player was just hit. One overlap counts as many hits.</p></div>
+          <div><h4>Fix</h4>
+<pre><span class="l"> if (overlapping(orb, player)) {</span><span class="l add">+  if (p.invuln &gt; 0) continue;</span><span class="l">   w.lives--;</span><span class="l add">+  p.invuln = 1.2; // seconds of hit protection</span><span class="l"> }</span></pre>
+          </div>
+          <div><h4>Pass criteria</h4>
+            <ul>
+              <li>First contact takes Lives from 3 to 2, and Hit protection counts down from 1.2 s.</li>
+              <li>The player blinks while protected.</li>
+              <li>Check BUG-02 passes: standing inside a stationary orb for 2.0 s leaves exactly 1 life.</li>
+            </ul>
+          </div>
+          <div><button class="btn small" type="button" data-repro="iFrames">Reproduce in the build</button></div>
+        </div>
+      </details>
+
+      <details class="report">
+        <summary><span class="rid">BUG-03</span><span class="rtitle">Dashing through a gem sometimes scores 20 instead of 10</span><span class="sev">Minor</span></summary>
+        <div class="rbody">
+          <div><h4>Player report</h4><p class="quote">“My score jumps by 20 on some gems, but only when I dash. Walking over them is always 10.”</p></div>
+          <div><h4>Steps to reproduce</h4>
+            <ol>
+              <li>Press “Reproduce in the build” below.</li>
+              <li>Walk onto a few gems and confirm Score rises by 10 each time.</li>
+              <li>Dash through gems with <kbd>Space</kbd> ten or more times. Some pickups add 20, others add 10, depending on where the dash lands.</li>
+            </ol>
+          </div>
+          <div class="twocol">
+            <div><h4>Expected</h4><p>Every gem is worth exactly 10, however it is collected.</p></div>
+            <div><h4>Actual</h4><p>Some dash pickups add 20. It is intermittent, which is why it takes several dashes to see.</p></div>
+          </div>
+          <div><h4>Cause</h4><p>A dash moves the player in two sub-steps per frame so it cannot skip over small gems. The pickup check runs after each sub-step, but collected gems are only removed at the end of the frame. A gem in range at both sub-steps is scored twice.</p></div>
+          <div><h4>Test design note</h4><p class="muted">Because the bug is intermittent, the automated check places a gem 30 px ahead of the player. At that distance both sub-steps of the second dash frame overlap the gem, so the bug reproduces every time instead of by luck.</p></div>
+          <div><h4>Fix</h4>
+<pre><span class="l"> for (const g of w.gems) {</span><span class="l">   if (!overlaps(p, g)) continue;</span><span class="l add">+  if (taken.has(g)) continue;</span><span class="l">   w.score += g.value;</span><span class="l add">+  taken.add(g);</span><span class="l"> }</span></pre>
+          </div>
+          <div><h4>Pass criteria</h4>
+            <ul>
+              <li>Every gem adds exactly 10 across 20 dash pickups.</li>
+              <li>Check BUG-03 passes: score is 10 after one dash through a gem.</li>
+            </ul>
+          </div>
+          <div><button class="btn small" type="button" data-repro="singleCollect">Reproduce in the build</button></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- AUTOMATED CHECKS -->
+    <section class="block" id="checks">
+      <h2>Automated checks</h2>
+      <p class="intro">Each check replays a fixed input sequence against the same game logic the playable build uses, with no screen involved. A pass or fail never depends on my reflexes. They ran when this page loaded.</p>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th scope="col">Check</th><th scope="col">Input sequence</th><th scope="col">Expected</th><th scope="col">Bugged build</th><th scope="col">Fixed build</th></tr>
+          </thead>
+          <tbody id="checkRows"></tbody>
+        </table>
       </div>
-
-      <form id="contactForm" onsubmit="submitForm(event)" class="space-y-4 max-w-md mx-auto">
-        <input type="email" id="clientEmail" required placeholder="Your Email Address" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-slate-100 outline-none focus:border-indigo-500">
-        <textarea id="clientMessage" rows="3" placeholder="Brief description of your project or idea..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-slate-100 outline-none focus:border-indigo-500"></textarea>
-        <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs sm:text-sm py-3.5 rounded-xl transition shadow-xl shadow-indigo-500/20">
-          🚀 Send Inquiry
-        </button>
-      </form>
-
-      <!-- SOCIAL LINKS -->
-      <div class="flex flex-wrap justify-center items-center gap-4 pt-4 border-t border-white/10 text-xs font-medium text-slate-400">
-        <a href="https://fiverr.com/ichanpants" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1">
-          <span>⭐</span> Fiverr Profile
-        </a>
-        <span>•</span>
-        <a href="https://x.com/ichanpants" target="_blank" class="hover:text-indigo-400 transition flex items-center gap-1">
-          <span>💬</span> X (Twitter)
-        </a>
-        <span>•</span>
-        <a href="https://www.instagram.com/ichanpants/" target="_blank" class="hover:text-pink-400 transition flex items-center gap-1">
-          <span>📸</span> Instagram
-        </a>
+      <div class="checkbar">
+        <button class="btn small" type="button" id="runChecks">Run checks again</button>
+        <p id="checkSummary" role="status"></p>
       </div>
     </section>
 
-  </div>
+    <!-- ABOUT -->
+    <section class="block" id="about">
+      <div class="about">
+        <h2>About me</h2>
+        <div class="copy">
+          <p>I’m Ichan, a hardcore gamer who keeps noticing what feels off: a cooldown that lies, a hitbox that’s unfair, a pickup that pays twice. I’m turning that instinct into a skill. I reproduce the problem, trace the cause, fix it, and write a check that proves it stays fixed.</p>
+          <p>I haven’t worked at a studio yet, so this page is my proof of work. I’m looking for contract work in gameplay implementation and test design.</p>
+        </div>
+      </div>
+    </section>
 
-  <footer class="text-center text-xs text-slate-500 pb-8 font-mono">
-    Designed with Framer Aesthetic & AI • &copy; 2026 ichanpants
-  </footer>
+    <!-- OTHER BUILDS -->
+    <section class="block" id="tools">
+      <h2>Other things I’ve built</h2>
+      <p class="intro">This is the other half of the banner: landing pages, web apps and small tools built fast with AI-assisted “vibe coding.” They run in your browser and show I can take an idea to a live page.</p>
 
-  <!-- ORIGINAL LOGIC & FIREBASE INTEGRATION (UNTOUCHED) -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBXHRzpLG3WqWeOYOJNFAcGp5I76aD3zSc",
-      authDomain: "ichanpants-portofolio.firebaseapp.com",
-      projectId: "ichanpants-portofolio",
-      storageBucket: "ichanpants-portofolio.firebasestorage.app",
-      messagingSenderId: "511432046597",
-      appId: "1:511432046597:web:d88b2a7b41bc0e6091046c",
-      measurementId: "G-Y8Y1G38CP2"
-    };
+      <div class="tabs" role="tablist" aria-label="Web tools">
+        <button type="button" role="tab" data-tab="tool-cost" aria-selected="true">Cost estimator</button>
+        <button type="button" role="tab" data-tab="tool-hook" aria-selected="false">Post counter</button>
+        <button type="button" role="tab" data-tab="tool-roi" aria-selected="false">Revenue calculator</button>
+        <button type="button" role="tab" data-tab="tool-pdf" aria-selected="false">PDF tools</button>
+      </div>
 
-    const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxkzk0osayRsJNCRUvGsCEdr_rApzc8ZkN8jWyyIldjQfpIDBj6Z16mRob4QrRVJZBfqQ/exec";
+      <div class="toolbox">
+        <div class="tool" id="tool-cost" role="tabpanel">
+          <h3>Project cost and time estimator</h3>
+          <div class="field"><label for="type">Project type</label>
+            <select id="type" class="input">
+              <option value="100">Landing page or single-page site ($100)</option>
+              <option value="200">Interactive web app or dashboard ($200)</option>
+              <option value="150">Micro SaaS or custom tool ($150)</option>
+            </select>
+          </div>
+          <div class="field"><label for="speed">Turnaround</label>
+            <select id="speed" class="input">
+              <option value="1">Standard (48 hours)</option>
+              <option value="1.3">Express (24 hours, +30%)</option>
+            </select>
+          </div>
+          <div class="result"><div>Estimated cost</div><div class="big" id="totalCost">$100 USD</div></div>
+          <div><button class="btn small" type="button" id="saveCost">Save estimate</button></div>
+        </div>
 
+        <div class="tool" id="tool-hook" role="tabpanel" hidden>
+          <h3>Social post counter</h3>
+          <div class="field"><label for="postText">Your draft</label>
+            <textarea id="postText" class="input" rows="4" placeholder="Type or paste a post"></textarea>
+          </div>
+          <div class="row3">
+            <div class="stat">Characters<strong id="charCount">0</strong></div>
+            <div class="stat">Words<strong id="wordCount">0</strong></div>
+            <div class="stat">X limit<strong id="xStatus">280 left</strong></div>
+          </div>
+          <div><button class="btn small" type="button" id="saveHook">Save draft count</button></div>
+        </div>
+
+        <div class="tool" id="tool-roi" role="tabpanel" hidden>
+          <h3>Monthly revenue calculator</h3>
+          <div class="row2">
+            <div class="field"><label for="visitors">Monthly visitors</label><input id="visitors" class="input" type="number" value="1000" min="0"></div>
+            <div class="field"><label for="productPrice">Product price ($)</label><input id="productPrice" class="input" type="number" value="50" min="0"></div>
+          </div>
+          <div class="field"><label for="convRate">Conversion rate (%)</label><input id="convRate" class="input" type="number" value="2" step="0.5" min="0"></div>
+          <div class="result"><div>Estimated monthly revenue</div><div class="big" id="totalROI">$1,000 USD</div></div>
+          <div><button class="btn small" type="button" id="saveROI">Save calculation</button></div>
+        </div>
+
+        <div class="tool" id="tool-pdf" role="tabpanel" hidden>
+          <h3>PDF tools</h3>
+          <p class="log-note">Files are processed inside your browser. Nothing is uploaded.</p>
+          <div class="field"><label for="pdfInput">Choose PDF files</label><input id="pdfInput" class="input" type="file" multiple accept="application/pdf"></div>
+          <div class="hero-actions">
+            <button class="btn small" type="button" id="pdfMerge">Merge selected PDFs</button>
+            <button class="btn small ghost" type="button" id="pdfInfo">Count pages</button>
+          </div>
+          <p id="pdfStatus" role="status"></p>
+        </div>
+
+        <p class="statusline" id="toolStatus" role="status"></p>
+        <p class="log-note" id="usageCount" hidden></p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="block" id="contact">
+      <div class="contact">
+        <div>
+          <h2>Want me to test or build something?</h2>
+          <p class="intro" style="margin-bottom:0">Have a build that needs breaking, or an idea that needs building? Send a short note. I reply by email.</p>
+          <div class="links">
+            <a href="https://x.com/ichanpants" target="_blank" rel="noopener">Message on X</a>
+            <a href="https://www.instagram.com/ichanpants/" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://fiverr.com/ichanpants" target="_blank" rel="noopener">Fiverr profile</a>
+          </div>
+        </div>
+        <form id="contactForm">
+          <div class="field"><label for="clientEmail">Your email</label><input id="clientEmail" class="input" type="email" required autocomplete="email"></div>
+          <div class="field"><label for="clientMessage">Message</label><textarea id="clientMessage" class="input" rows="4" placeholder="What do you need tested or built?"></textarea></div>
+          <div><button class="btn" type="submit" id="btnSubmit">Send message</button></div>
+          <p id="formStatus" role="status" class="log-note"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 ichanpants. Built by hand and with AI-assisted coding.</footer>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script>
+(() => {
+'use strict';
+
+/* CORE:START  (pure game logic, no DOM. The automated checks run this exact code.) */
+const W = 800, H = 480;
+const C = {
+  SPEED: 220, DASH_SPEED: 660, DASH_TIME: 0.18, DASH_CD: 0.8,
+  IFRAMES: 1.2, PR: 10, GR: 8, HR: 12, DT: 1 / 60, MAX_HAZARDS: 7
+};
+const BUGGED = { normalizeDiagonal: false, iFrames: false, singleCollect: false };
+const FIXED  = { normalizeDiagonal: true,  iFrames: true,  singleCollect: true  };
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function makeWorld(flags, seed, opts = {}) {
+  const w = {
+    flags: Object.assign({}, flags), rnd: mulberry32(seed),
+    t: 0, hitT: -10, state: opts.state || 'ready',
+    score: 0, lives: 3, gemsTaken: 0, noSpawn: !!opts.empty, counted: false,
+    p: { x: W / 2, y: H / 2, dx: 1, dy: 0, r: C.PR, dashT: 0, dashCD: 0, invuln: 0, speed: 0 },
+    hazards: [], gems: []
+  };
+  if (!opts.empty) {
+    for (let i = 0; i < 3; i++) addHazard(w);
+    for (let i = 0; i < 5; i++) addGem(w);
+  }
+  return w;
+}
+
+function addHazard(w) {
+  for (let k = 0; k < 30; k++) {
+    const x = 30 + w.rnd() * (W - 60), y = 30 + w.rnd() * (H - 60);
+    if (Math.hypot(x - w.p.x, y - w.p.y) < 170) continue;
+    const a = w.rnd() * Math.PI * 2, s = 90 + w.rnd() * 60;
+    w.hazards.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: C.HR });
+    return;
+  }
+}
+
+function addGem(w) {
+  for (let k = 0; k < 40; k++) {
+    const x = 30 + w.rnd() * (W - 60), y = 30 + w.rnd() * (H - 60);
+    if (Math.hypot(x - w.p.x, y - w.p.y) < 90) continue;
+    if (w.hazards.some(h => Math.hypot(x - h.x, y - h.y) < 60)) continue;
+    w.gems.push({ x, y, r: C.GR, value: 10 });
+    return;
+  }
+  w.gems.push({ x: 60, y: 60, r: C.GR, value: 10 });
+}
+
+function collectGems(w, taken) {
+  const p = w.p;
+  for (const g of w.gems) {
+    if (Math.hypot(g.x - p.x, g.y - p.y) >= p.r + g.r) continue;
+    if (w.flags.singleCollect && taken.has(g)) continue;   // BUG-03 fix
+    w.score += g.value;
+    taken.add(g);
+  }
+}
+
+function step(w, inp, dt) {
+  if (w.state !== 'play') return;
+  const p = w.p, f = w.flags;
+  w.t += dt;
+  p.dashCD = Math.max(0, p.dashCD - dt);
+  p.invuln = Math.max(0, p.invuln - dt);
+
+  let mx = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
+  let my = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
+  if (f.normalizeDiagonal && mx && my) {                    // BUG-01 fix
+    const len = Math.hypot(mx, my); mx /= len; my /= len;
+  }
+  if (mx || my) { const l = Math.hypot(mx, my); p.dx = mx / l; p.dy = my / l; }
+
+  if (inp.dash && p.dashCD <= 0 && p.dashT <= 0) { p.dashT = C.DASH_TIME; p.dashCD = C.DASH_CD; }
+
+  const dashing = p.dashT > 0;
+  const substeps = dashing ? 2 : 1;                         // dash uses sub-steps so it can't skip over gems
+  const sp = dashing ? C.DASH_SPEED : C.SPEED;
+  const vx = dashing ? p.dx : mx, vy = dashing ? p.dy : my;
+  p.speed = Math.hypot(vx, vy) * sp;
+
+  const taken = new Set();
+  for (let i = 0; i < substeps; i++) {
+    p.x = clamp(p.x + vx * sp * dt / substeps, p.r, W - p.r);
+    p.y = clamp(p.y + vy * sp * dt / substeps, p.r, H - p.r);
+    collectGems(w, taken);
+  }
+  if (dashing) p.dashT = Math.max(0, p.dashT - dt);
+
+  if (taken.size) {
+    w.gems = w.gems.filter(g => !taken.has(g));             // removal happens once per frame
+    for (const g of taken) {
+      w.gemsTaken++;
+      if (!w.noSpawn) {
+        addGem(w);
+        if (w.gemsTaken % 5 === 0 && w.hazards.length < C.MAX_HAZARDS) addHazard(w);
+      }
+    }
+  }
+
+  for (const h of w.hazards) {
+    h.x += h.vx * dt; h.y += h.vy * dt;
+    if (h.x < h.r) { h.x = h.r; h.vx = Math.abs(h.vx); } else if (h.x > W - h.r) { h.x = W - h.r; h.vx = -Math.abs(h.vx); }
+    if (h.y < h.r) { h.y = h.r; h.vy = Math.abs(h.vy); } else if (h.y > H - h.r) { h.y = H - h.r; h.vy = -Math.abs(h.vy); }
+    if (Math.hypot(h.x - p.x, h.y - p.y) < h.r + p.r) {
+      if (f.iFrames && p.invuln > 0) continue;              // BUG-02 fix
+      w.lives--; w.hitT = w.t;
+      if (f.iFrames) p.invuln = C.IFRAMES;
+      if (w.lives <= 0) { w.lives = 0; w.state = 'over'; break; }
+    }
+  }
+}
+
+const CHECKS = [
+  {
+    id: 'BUG-01', name: 'Diagonal speed',
+    input: 'Hold Right for 0.5 s. In a second run, hold Right and Down for 0.5 s.',
+    expect: 'Distance travelled matches within 2%.',
+    run(flags) {
+      const a = makeWorld(flags, 1, { empty: true, state: 'play' });
+      const b = makeWorld(flags, 1, { empty: true, state: 'play' });
+      for (let i = 0; i < 30; i++) { step(a, { right: true }, C.DT); step(b, { right: true, down: true }, C.DT); }
+      const da = a.p.x - W / 2, db = Math.hypot(b.p.x - W / 2, b.p.y - H / 2), ratio = db / da;
+      return { pass: Math.abs(ratio - 1) <= 0.02, got: 'straight ' + da.toFixed(1) + ' px, diagonal ' + db.toFixed(1) + ' px (ratio ' + ratio.toFixed(2) + ')' };
+    }
+  },
+  {
+    id: 'BUG-02', name: 'Hit protection',
+    input: 'Stand inside a stationary orb for 2.0 s without moving.',
+    expect: 'Exactly 1 life lost (one hit per 1.2 s), run still going.',
+    run(flags) {
+      const w = makeWorld(flags, 2, { empty: true, state: 'play' });
+      w.hazards.push({ x: w.p.x, y: w.p.y, vx: 0, vy: 0, r: C.HR });
+      for (let i = 0; i < 120; i++) step(w, {}, C.DT);
+      return { pass: w.lives === 1 && w.state === 'play', got: 'lives left ' + w.lives + ', state ' + w.state };
+    }
+  },
+  {
+    id: 'BUG-03', name: 'Single pickup',
+    input: 'Place a gem 30 px to the right. Hold Right and press Dash on frame 1.',
+    expect: 'Score is exactly 10.',
+    run(flags) {
+      const w = makeWorld(flags, 3, { empty: true, state: 'play' });
+      w.gems.push({ x: w.p.x + 30, y: w.p.y, r: C.GR, value: 10 });
+      for (let i = 0; i < 30; i++) step(w, { right: true, dash: i === 0 }, C.DT);
+      return { pass: w.score === 10, got: 'score ' + w.score };
+    }
+  }
+];
+/* CORE:END */
+
+// ---------- helpers ----------
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- theme ----------
+const themeBtn = $('#themeToggle');
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  themeBtn.textContent = t === 'dark' ? 'Light theme' : 'Dark theme';
+}
+applyTheme(document.documentElement.dataset.theme || 'dark');
+themeBtn.addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+
+// ---------- live game ----------
+const liveFlags = Object.assign({}, BUGGED);
+const canvas = $('#game'), ctx = canvas.getContext('2d');
+const dpr = Math.min(2, window.devicePixelRatio || 1);
+canvas.width = W * dpr; canvas.height = H * dpr;
+
+const floor = document.createElement('canvas');
+floor.width = W * dpr; floor.height = H * dpr;
+(function drawFloor() {
+  const f = floor.getContext('2d');
+  if (!f) return;
+  f.scale(dpr, dpr);
+  for (let gy = 0; gy < H; gy += 40) for (let gx = 0; gx < W; gx += 40) {
+    f.fillStyle = (((gx + gy) / 40) % 2) ? '#161a40' : '#11143a';
+    f.fillRect(gx, gy, 40, 40);
+  }
+  f.strokeStyle = '#272e66'; f.lineWidth = 1; f.beginPath();
+  for (let x = 0; x <= W; x += 40) { f.moveTo(x + 0.5, 0); f.lineTo(x + 0.5, H); }
+  for (let y = 0; y <= H; y += 40) { f.moveTo(0, y + 0.5); f.lineTo(W, y + 0.5); }
+  f.stroke();
+  f.shadowColor = '#e052ff'; f.shadowBlur = 14; f.globalAlpha = 0.9; f.strokeStyle = '#e052ff'; f.lineWidth = 4; f.strokeRect(2, 2, W - 4, H - 4);
+})();
+
+let world, best = 0, dashQueued = false, inView = true, last = 0, acc = 0;
+const keys = new Set();
+const opt = { hitbox: false, slow: false };
+
+function newGame(startNow) {
+  world = makeWorld(liveFlags, (Date.now() & 0x7fffffff) || 1);
+  world.flags = liveFlags;               // share, so toggling a fix applies instantly
+  if (startNow) world.state = 'play';
+  dashQueued = false;
+}
+function startOrResume() {
+  if (world.state === 'over') newGame(true);
+  else world.state = 'play';
+  canvas.focus({ preventScroll: true });
+}
+function pause() { if (world && world.state === 'play') world.state = 'paused'; keys.clear(); }
+newGame(false);
+
+const CODEMAP = { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down' };
+canvas.addEventListener('keydown', e => {
+  const dir = CODEMAP[e.code];
+  if (dir) {
+    e.preventDefault(); keys.add(dir);
+    if (world.state === 'ready' || world.state === 'paused') startOrResume();
+  } else if (e.code === 'Space' || e.code === 'Enter') {
+    e.preventDefault();
+    if (world.state === 'play') { if (e.code === 'Space') dashQueued = true; } else startOrResume();
+  } else if (e.code === 'KeyR') {
+    e.preventDefault(); newGame(true);
+  }
+});
+canvas.addEventListener('keyup', e => { const dir = CODEMAP[e.code]; if (dir) keys.delete(dir); });
+$('#stage').addEventListener('click', () => { if (world.state === 'play') canvas.focus({ preventScroll: true }); });
+$('#overlay').addEventListener('click', () => { startOrResume(); });
+document.querySelector('.play').addEventListener('focusout', e => {
+  const to = e.relatedTarget;
+  if (to && document.querySelector('.play').contains(to)) return;
+  pause();
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver(es => { inView = es[0].isIntersecting; if (!inView) pause(); }, { threshold: 0.2 }).observe(canvas);
+}
+
+// touch controls
+$$('.touch [data-key]').forEach(b => {
+  const k = b.dataset.key;
+  b.addEventListener('pointerdown', e => { e.preventDefault(); keys.add(k); if (world.state !== 'play') startOrResume(); });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, () => keys.delete(k)));
+});
+$('#touchDash').addEventListener('pointerdown', e => { e.preventDefault(); if (world.state === 'play') dashQueued = true; else startOrResume(); });
+
+// sidebar controls
+function syncControls() {
+  const vals = Object.values(liveFlags);
+  const allFixed = vals.every(Boolean), allBug = vals.every(v => !v);
+  $$('[data-build]').forEach(b => b.setAttribute('aria-checked', String((b.dataset.build === 'fixed' && allFixed) || (b.dataset.build === 'bugged' && allBug))));
+  $$('[data-flag]').forEach(i => { i.checked = !!liveFlags[i.dataset.flag]; });
+  $('#mixNote').hidden = allFixed || allBug;
+}
+$$('[data-build]').forEach(b => b.addEventListener('click', () => {
+  const fixed = b.dataset.build === 'fixed';
+  Object.keys(liveFlags).forEach(k => { liveFlags[k] = fixed; });
+  syncControls();
+}));
+$$('[data-flag]').forEach(i => i.addEventListener('change', () => { liveFlags[i.dataset.flag] = i.checked; syncControls(); }));
+$('#optHitbox').addEventListener('change', e => { opt.hitbox = e.target.checked; });
+$('#optSlow').addEventListener('change', e => { opt.slow = e.target.checked; });
+$$('[data-repro]').forEach(b => b.addEventListener('click', () => {
+  Object.keys(liveFlags).forEach(k => { liveFlags[k] = k !== b.dataset.repro; });   // only this bug is present
+  syncControls(); newGame(false);
+  $('#playtest').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+}));
+syncControls();
+
+// render
+function render() {
+  const w = world, p = w.p;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.drawImage(floor, 0, 0, W, H);
+
+  const since = w.t - w.hitT;
+  if (since < 0.3) {
+    ctx.save(); ctx.globalAlpha = 1 - since / 0.3; ctx.strokeStyle = '#ff5d7a'; ctx.lineWidth = 10;
+    ctx.strokeRect(5, 5, W - 10, H - 10); ctx.restore();
+  }
+
+  for (const g of w.gems) {
+    ctx.fillStyle = '#ffd23f'; ctx.strokeStyle = '#8a6d00'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(g.x, g.y - g.r - 2); ctx.lineTo(g.x + g.r + 1, g.y); ctx.lineTo(g.x, g.y + g.r + 2); ctx.lineTo(g.x - g.r - 1, g.y);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  for (const h of w.hazards) {
+    ctx.fillStyle = '#ff4d6d'; ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#8f1f3d'; ctx.beginPath(); ctx.arc(h.x, h.y, h.r * 0.55, 0, Math.PI * 2); ctx.fill();
+  }
+
+  ctx.save();
+  if (p.invuln > 0 && Math.floor(w.t * 10) % 2 === 0) ctx.globalAlpha = 0.35;
+  if (p.dashT > 0) {
+    for (let i = 3; i >= 1; i--) {
+      ctx.globalAlpha = 0.12 * (4 - i);
+      ctx.fillStyle = '#2ee6ff';
+      ctx.fillRect(p.x - p.dx * i * 9 - 10, p.y - p.dy * i * 9 - 10, 20, 20);
+    }
+    ctx.globalAlpha = 1;
+  }
+  ctx.fillStyle = '#2ee6ff'; ctx.fillRect(p.x - 10, p.y - 10, 20, 20);
+  ctx.fillStyle = '#f1f2f3'; ctx.fillRect(p.x + p.dx * 8 - 3, p.y + p.dy * 8 - 3, 6, 6);
+  ctx.restore();
+
+  if (p.dashCD > 0) {
+    ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(p.x - 12, p.y + 16, 24, 3);
+    ctx.fillStyle = '#e052ff'; ctx.fillRect(p.x - 12, p.y + 16, 24 * (1 - p.dashCD / C.DASH_CD), 3);
+  }
+
+  if (opt.hitbox) {
+    ctx.strokeStyle = '#7CFC00'; ctx.lineWidth = 1.5;
+    const ring = (x, y, r) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke(); };
+    ring(p.x, p.y, p.r);
+    w.gems.forEach(g => ring(g.x, g.y, g.r));
+    w.hazards.forEach(h => ring(h.x, h.y, h.r));
+  }
+}
+
+// telemetry + overlay
+const el = id => document.getElementById(id);
+let shownState = '';
+function updateUI() {
+  const w = world, p = w.p;
+  if (w.state === 'over' && !w.counted) { w.counted = true; best = Math.max(best, w.score); }
+  el('tScore').textContent = w.score;
+  el('tBest').textContent = Math.max(best, w.score);
+  el('tLives').textContent = '●'.repeat(w.lives) + '○'.repeat(3 - w.lives);
+  const sp = w.state === 'play' ? p.speed : 0;
+  el('tSpeed').textContent = Math.round(sp) + ' px/s';
+  el('tSpeed').className = (sp > C.SPEED + 1 && p.dashT <= 0) ? 'warn' : '';
+  el('tDash').textContent = p.dashCD > 0 ? p.dashCD.toFixed(1) + ' s' : 'Ready';
+  el('tProt').textContent = p.invuln > 0 ? p.invuln.toFixed(1) + ' s' : 'None';
+
+  const key = w.state + (w.state === 'over' ? w.score : '');
+  if (key !== shownState) {
+    shownState = key;
+    const ov = el('overlay');
+    ov.hidden = w.state === 'play';
+    if (w.state === 'ready') { el('ovTitle').textContent = 'Playtest build 0.3'; el('ovHint').textContent = 'Click here or press Space to start.'; }
+    if (w.state === 'paused') { el('ovTitle').textContent = 'Paused'; el('ovHint').textContent = 'Click here or press Space to resume.'; }
+    if (w.state === 'over') { el('ovTitle').textContent = 'Run over: ' + w.score + ' points'; el('ovHint').textContent = 'Press R or click here to try again.'; }
+  }
+}
+
+function inputNow() {
+  return { left: keys.has('left'), right: keys.has('right'), up: keys.has('up'), down: keys.has('down'), dash: dashQueued };
+}
+function frame(ts) {
+  if (!last) last = ts;
+  const dt = Math.min(0.1, (ts - last) / 1000); last = ts;
+  if (inView) {
+    if (world.state === 'play') {
+      acc += dt * (opt.slow ? 0.25 : 1);
+      while (acc >= C.DT) { step(world, inputNow(), C.DT); dashQueued = false; acc -= C.DT; if (world.state !== 'play') break; }
+    } else { acc = 0; }
+    render(); updateUI();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ---------- automated checks table ----------
+function renderChecks() {
+  const body = el('checkRows'); body.innerHTML = '';
+  let b = 0, f = 0;
+  CHECKS.forEach(c => {
+    const rb = c.run(BUGGED), rf = c.run(FIXED);
+    if (rb.pass) b++; if (rf.pass) f++;
+    const cell = r => '<td class="res ' + (r.pass ? 'pass' : 'fail') + '">' + (r.pass ? 'Pass' : 'Fail') + '<span class="detail">' + r.got + '</span></td>';
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><strong>' + c.id + '</strong><br>' + c.name + '</td><td>' + c.input + '</td><td>' + c.expect + '</td>' + cell(rb) + cell(rf);
+    body.appendChild(tr);
+  });
+  el('checkSummary').textContent = 'Bugged build: ' + b + ' of ' + CHECKS.length + ' pass. Fixed build: ' + f + ' of ' + CHECKS.length + ' pass.';
+}
+el('runChecks').addEventListener('click', renderChecks);
+renderChecks();
+
+// ---------- other builds: tabs ----------
+$$('[data-tab]').forEach(btn => btn.addEventListener('click', () => {
+  $$('[data-tab]').forEach(b => b.setAttribute('aria-selected', String(b === btn)));
+  $$('.tool').forEach(t => { t.hidden = t.id !== btn.dataset.tab; });
+  el('toolStatus').textContent = '';
+}));
+
+// ---------- Firebase + webhook (your original config) ----------
+const firebaseConfig = {
+  apiKey: "AIzaSyBXHRzpLG3WqWeOYOJNFAcGp5I76aD3zSc",
+  authDomain: "ichanpants-portofolio.firebaseapp.com",
+  projectId: "ichanpants-portofolio",
+  storageBucket: "ichanpants-portofolio.firebasestorage.app",
+  messagingSenderId: "511432046597",
+  appId: "1:511432046597:web:d88b2a7b41bc0e6091046c",
+  measurementId: "G-Y8Y1G38CP2"
+};
+const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxkzk0osayRsJNCRUvGsCEdr_rApzc8ZkN8jWyyIldjQfpIDBj6Z16mRob4QrRVJZBfqQ/exec";
+
+let db = null;
+try {
+  if (window.firebase) {
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    db = firebase.firestore();
+    db.collection("tool_usage_logs").onSnapshot(snap => {
+      const n = el('usageCount');
+      n.textContent = snap.size.toLocaleString() + ' tool runs saved by visitors so far.';
+      n.hidden = false;
+    }, () => {});
+  }
+} catch (e) { db = null; }
 
-    const BASE_OFFSET = 348;
+function say(msg) { el('toolStatus').textContent = msg; }
+function logToolUsage(tool, result) {
+  if (!db) { say('Could not reach the database, so nothing was saved.'); return; }
+  db.collection("tool_usage_logs").add({ tool, result, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+    .then(() => say('Saved.'))
+    .catch(() => say('Could not save. Please try again later.'));
+}
 
-    db.collection("tool_usage_logs").onSnapshot((snapshot) => {
-      const realCount = snapshot.size;
-      const totalDisplay = BASE_OFFSET + realCount;
-      document.getElementById('total-usage-count').innerText = totalDisplay.toLocaleString() + ' runs';
-    }, (err) => {
-      document.getElementById('total-usage-count').innerText = BASE_OFFSET + ' runs';
-    });
+// cost estimator
+function calcCost() {
+  el('totalCost').textContent = '$' + Math.round(parseFloat(el('type').value) * parseFloat(el('speed').value)) + ' USD';
+}
+el('type').addEventListener('change', calcCost);
+el('speed').addEventListener('change', calcCost);
+el('saveCost').addEventListener('click', () => logToolUsage('Cost Estimator', el('totalCost').textContent));
 
-    function logToolUsage(toolName, resultValue) {
-      db.collection("tool_usage_logs").add({
-        tool: toolName,
-        result: resultValue,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        alert('Saved to cloud database successfully!');
-      }).catch(err => {
-        alert('Log recorded locally!');
-      });
+// post counter
+function countChars() {
+  const text = el('postText').value, left = 280 - text.length;
+  el('charCount').textContent = text.length;
+  el('wordCount').textContent = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  el('xStatus').textContent = left >= 0 ? left + ' left' : 'Over by ' + (-left);
+  el('xStatus').style.color = left >= 0 ? '' : 'var(--bug)';
+}
+el('postText').addEventListener('input', countChars);
+el('saveHook').addEventListener('click', () => logToolUsage('Hook Counter', el('charCount').textContent + ' chars'));
+
+// revenue calculator
+function calcROI() {
+  const v = parseFloat(el('visitors').value) || 0, pr = parseFloat(el('productPrice').value) || 0, cv = (parseFloat(el('convRate').value) || 0) / 100;
+  el('totalROI').textContent = '$' + Math.round(v * cv * pr).toLocaleString() + ' USD';
+}
+['visitors', 'productPrice', 'convRate'].forEach(id => el(id).addEventListener('input', calcROI));
+el('saveROI').addEventListener('click', () => logToolUsage('ROI Calculator', el('totalROI').textContent));
+
+// PDF tools
+async function mergePDFs() {
+  const files = el('pdfInput').files, status = el('pdfStatus');
+  if (!window.PDFLib) { status.textContent = 'The PDF library did not load. Check your connection and reload.'; return; }
+  if (files.length < 2) { status.textContent = 'Choose at least 2 PDF files to merge.'; return; }
+  status.textContent = 'Merging in your browser…';
+  try {
+    const merged = await PDFLib.PDFDocument.create();
+    for (const file of files) {
+      const pdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
+      (await merged.copyPages(pdf, pdf.getPageIndices())).forEach(pg => merged.addPage(pg));
     }
+    const blob = new Blob([await merged.save()], { type: 'application/pdf' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'merged_document.pdf'; a.click();
+    status.textContent = 'Merged ' + files.length + ' files. Your download has started.';
+    logToolUsage('PDF Merge Utility', files.length + ' files merged');
+  } catch (err) { status.textContent = 'Could not merge: ' + err.message; }
+}
+async function countPages() {
+  const files = el('pdfInput').files, status = el('pdfStatus');
+  if (!window.PDFLib) { status.textContent = 'The PDF library did not load. Check your connection and reload.'; return; }
+  if (!files.length) { status.textContent = 'Choose a PDF file first.'; return; }
+  try {
+    const pdf = await PDFLib.PDFDocument.load(await files[0].arrayBuffer());
+    status.textContent = '“' + files[0].name + '” has ' + pdf.getPageCount() + ' page(s).';
+    logToolUsage('PDF Info Reader', pdf.getPageCount() + ' pages inspected');
+  } catch (err) { status.textContent = 'Could not read that file: ' + err.message; }
+}
+el('pdfMerge').addEventListener('click', mergePDFs);
+el('pdfInfo').addEventListener('click', countPages);
 
-    function submitForm(e) {
-      e.preventDefault();
-      const btn = document.getElementById('btnSubmit');
-      btn.innerText = "Sending...";
-      btn.disabled = true;
+// contact form
+el('contactForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const btn = el('btnSubmit'), status = el('formStatus');
+  btn.disabled = true; btn.textContent = 'Sending…'; status.textContent = '';
+  fetch(GAS_WEBHOOK_URL, {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: el('clientEmail').value, message: el('clientMessage').value, timestamp: new Date().toISOString() })
+  }).then(() => {
+    status.textContent = 'Message sent. I’ll reply by email.';
+    el('contactForm').reset();
+  }).catch(() => {
+    status.textContent = 'Could not send the message. Please message me on X instead.';
+  }).finally(() => { btn.disabled = false; btn.textContent = 'Send message'; });
+});
 
-      const payload = {
-        email: document.getElementById('clientEmail').value,
-        message: document.getElementById('clientMessage').value,
-        timestamp: new Date().toISOString()
-      };
-
-      fetch(GAS_WEBHOOK_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(() => {
-        alert("Inquiry sent successfully! Data stored in Google Sheets.");
-        document.getElementById('contactForm').reset();
-        btn.innerText = "🚀 Send Inquiry";
-        btn.disabled = false;
-      }).catch(err => {
-        alert("Inquiry sent successfully!");
-        btn.innerText = "🚀 Send Inquiry";
-        btn.disabled = false;
-      });
-    }
-
-    function applyTheme(isDark) {
-      const html = document.documentElement;
-      const body = document.body;
-      const icon = document.getElementById('themeIcon');
-      
-      if (isDark) {
-        html.classList.add('dark');
-        body.classList.remove('bg-slate-50', 'text-slate-900');
-        body.classList.add('bg-slate-950', 'text-slate-100');
-        if (icon) icon.innerText = '☀️';
-      } else {
-        html.classList.remove('dark');
-        body.classList.remove('bg-slate-950', 'text-slate-100');
-        body.classList.add('bg-slate-50', 'text-slate-900');
-        if (icon) icon.innerText = '🌙';
-      }
-    }
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDarkNow = html.classList.contains('dark');
-      const nextTheme = !isDarkNow;
-      
-      applyTheme(nextTheme);
-      localStorage.setItem('theme', nextTheme ? 'dark' : 'light');
-    }
-
-    (function initTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        applyTheme(false);
-      } else {
-        applyTheme(true);
-      }
-    })();
-
-    function switchTab(toolId) {
-      document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(toolId).classList.remove('hidden');
-
-      ['tool1', 'tool2', 'tool3', 'tool4', 'tool5'].forEach(t => {
-        const btn = document.getElementById('tab-' + t);
-        if (btn) {
-          if (t === toolId) {
-            btn.className = "px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold transition";
-          } else {
-            btn.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition";
-          }
-        }
-      });
-
-      if (toolId === 'tool4' && !window.gameInitialized) {
-        initGameCanvas();
-      }
-    }
-
-    function calcCost() {
-      const typePrice = parseFloat(document.getElementById('type').value);
-      const speedMultiplier = parseFloat(document.getElementById('speed').value);
-      const total = Math.round(typePrice * speedMultiplier);
-      document.getElementById('totalCost').innerText = '$' + total + ' USD';
-    }
-
-    function countChars() {
-      const text = document.getElementById('postText').value;
-      document.getElementById('charCount').innerText = text.length;
-      document.getElementById('wordCount').innerText = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-      const xLeft = 280 - text.length;
-      document.getElementById('xStatus').innerText = xLeft >= 0 ? xLeft + ' left' : 'Over limit!';
-      document.getElementById('xStatus').className = xLeft >= 0 ? 'text-lg font-bold text-emerald-400 mt-1' : 'text-lg font-bold text-red-400 mt-1';
-    }
-
-    function calcROI() {
-      const visitors = parseFloat(document.getElementById('visitors').value) || 0;
-      const price = parseFloat(document.getElementById('productPrice').value) || 0;
-      const conv = (parseFloat(document.getElementById('convRate').value) || 0) / 100;
-      const revenue = Math.round(visitors * conv * price);
-      document.getElementById('totalROI').innerText = '$' + revenue.toLocaleString() + ' USD';
-    }
-
-    async function processPDFMerge() {
-      const fileInput = document.getElementById('pdfInput');
-      const status = document.getElementById('pdfStatus');
-      status.classList.remove('hidden');
-
-      if (fileInput.files.length < 2) {
-        status.innerText = "⚠️ Please select at least 2 PDF files to merge.";
-        return;
-      }
-
-      status.innerText = "⏳ Processing PDF merge client-side...";
-
-      try {
-        const mergedPdf = await PDFLib.PDFDocument.create();
-
-        for (let file of fileInput.files) {
-          const arrayBuffer = await file.arrayBuffer();
-          const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-          copiedPages.forEach((page) => mergedPdf.addPage(page));
-        }
-
-        const mergedPdfBytes = await mergedPdf.save();
-        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'merged_document.pdf';
-        link.click();
-
-        status.innerText = "✅ PDF merged successfully! Download started.";
-        logToolUsage('PDF Merge Utility', fileInput.files.length + ' files merged');
-      } catch (err) {
-        status.innerText = "❌ Error merging PDFs: " + err.message;
-      }
-    }
-
-    async function extractPDFInfo() {
-      const fileInput = document.getElementById('pdfInput');
-      const status = document.getElementById('pdfStatus');
-      status.classList.remove('hidden');
-
-      if (fileInput.files.length === 0) {
-        status.innerText = "⚠️ Please select a PDF file first.";
-        return;
-      }
-
-      try {
-        const file = fileInput.files[0];
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-        const count = pdf.getPageCount();
-
-        status.innerText = `📄 Document: "${file.name}" contains ${count} page(s).`;
-        logToolUsage('PDF Info Reader', count + ' pages inspected');
-      } catch (err) {
-        status.innerText = "❌ Error reading PDF: " + err.message;
-      }
-    }
-
-    // GAME QA CANVAS ENGINE
-    function initGameCanvas() {
-      window.gameInitialized = true;
-      const canvas = document.getElementById('gameCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      
-      let player = { x: 40, y: 120, width: 24, height: 24, vy: 0, gravity: 0.6, jumping: false };
-      let obstacle = { x: canvas.width, y: 124, width: 18, height: 20, speed: 3.5 };
-      let score = 0;
-      let animId;
-
-      function jump() {
-        if (!player.jumping) {
-          player.vy = -10;
-          player.jumping = true;
-        }
-      }
-
-      canvas.addEventListener('click', jump);
-      window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && !document.getElementById('tool4').classList.contains('hidden')) {
-          jump();
-        }
-      });
-
-      function loop() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Ground line
-        ctx.strokeStyle = '#334155';
-        ctx.beginPath();
-        ctx.moveTo(0, 144);
-        ctx.lineTo(canvas.width, 144);
-        ctx.stroke();
-
-        // Player physics update
-        player.vy += player.gravity;
-        player.y += player.vy;
-        if (player.y >= 120) {
-          player.y = 120;
-          player.vy = 0;
-          player.jumping = false;
-        }
-
-        // Draw Player
-        ctx.fillStyle = '#818cf8';
-        ctx.fillRect(player.x, player.y, player.width, player.height);
-
-        // Move & Draw Obstacle
-        obstacle.x -= obstacle.speed;
-        if (obstacle.x + obstacle.width < 0) {
-          obstacle.x = canvas.width;
-          score++;
-          document.getElementById('gameScore').innerText = score;
-        }
-        ctx.fillStyle = '#f43f5e';
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-
-        // Collision Check
-        if (
-          player.x < obstacle.x + obstacle.width &&
-          player.x + player.width > obstacle.x &&
-          player.y < obstacle.y + obstacle.height &&
-          player.y + player.height > obstacle.y
-        ) {
-          document.getElementById('gameStatus').innerText = 'Collision Detected! Resetting...';
-          document.getElementById('gameStatus').className = 'text-red-400 font-bold animate-pulse';
-          obstacle.x = canvas.width;
-          score = 0;
-          document.getElementById('gameScore').innerText = score;
-          setTimeout(() => {
-            document.getElementById('gameStatus').innerText = 'Ready (Click to Jump)';
-            document.getElementById('gameStatus').className = 'text-emerald-400';
-          }, 1200);
-        }
-
-        animId = requestAnimationFrame(loop);
-      }
-
-      loop();
-    }
-  </script>
+})();
+</script>
 </body>
 </html>
